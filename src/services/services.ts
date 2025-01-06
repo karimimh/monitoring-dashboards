@@ -2,11 +2,14 @@ import { PanelType, panelSchema } from "@/schemas/panel";
 import axios from "axios";
 import qs from "qs";
 
-export const fetchPanel = async (): Promise<PanelType> => {
-  const BASE_URL = "http://ir.snnf.me:8086/query?db=influx";
+export const fetchPanel = async (
+  db: string,
+  query: string
+): Promise<PanelType> => {
+  const BASE_URL = `http://ir.snnf.me:8086/query?db=${db}`;
 
   const payload = {
-    q: `SELECT mean("available_percent") FROM "mem" WHERE "host" =~ /^docker-telegraf$/ and time >= 1735998980696ms and time <= 1736171750696ms GROUP BY time(1m) fill(null)`,
+    q: query,
   };
 
   const response = await axios.post(BASE_URL, qs.stringify(payload), {
