@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+"use client";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,22 +14,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Military Monitoring",
-  description: "Monitoring dashboards created for military project",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const queryClient = new QueryClient();
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
       </body>
     </html>
   );
