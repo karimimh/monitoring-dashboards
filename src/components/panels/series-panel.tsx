@@ -1,39 +1,56 @@
 "use client";
 
 import { PanelType } from "@/schemas/panel";
+import { getRandomColor } from "@/utils/color";
+import { useEffect, useMemo, useState } from "react";
 import Panel from "./panel";
 import SeriesPanelChart from "./series-panel-chart";
-import { getRandomColor } from "@/utils/color";
-import { useEffect, useState } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 interface SeriesPanelProps {
-  panel: PanelType;
+  panelData: PanelType[];
 }
 
-const SeriesPanel = ({ panel }: SeriesPanelProps) => {
+const SeriesPanel = ({ panelData }: SeriesPanelProps) => {
   const panelName =
-    panel.results.at(0)?.series.at(0)?.name ?? "PANEL NAME NOT FOUND";
+    panelData.at(0)?.results.at(0)?.series.at(0)?.name ??
+    "PANEL NAME NOT FOUND";
   const [colors, setColors] = useState<string[]>([]);
 
   useEffect(() => {
-    const generatedColors = panel.results.flatMap((panelData) =>
-      panelData.series.map(() => getRandomColor())
-    );
-    setColors(generatedColors);
-  }, [panel]);
+    const generatedColors = panelData
+      .at(0)
+      ?.results.flatMap((panelData) =>
+        panelData.series.map(() => getRandomColor())
+      );
+    if (generatedColors) setColors(generatedColors);
+  }, [panelData]);
+
+  const panelValues = useMemo(() => {
+    const result = [];
+    for (let i = 0; i < panelData.length; i++) {
+      const panelPlotItem = panelData[i];
+      const data = panelPlotItem.results[0].series[0].values;
+      result.push(data);
+    }
+    return result;
+  }, [panelData]);
+
   return (
-    <Panel childContainerClassName="px-2" className="w-full h-96" title={panelName}>
-      {panel.results.map((panelData) => {
-        const data = panelData.series.map((item) => item.values);
-        return (
-          <SeriesPanelChart
-            key={panelName}
-            colors={colors}
-            data={data}
-            paddingPercentage={10}
-          />
-        );
-      })}
+    <Panel
+      childContainerClassName="p-2"
+      className="w-full h-96"
+      title={panelName}
+    >
+      {panelData.length > 0 ? (
+        <SeriesPanelChart
+          colors={colors}
+          data={panelValues}
+          paddingPercentage={10}
+        />
+      ) : (
+        <Skeleton className="w-full h-full" />
+      )}
     </Panel>
   );
 };

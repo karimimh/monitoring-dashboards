@@ -59,8 +59,10 @@ const SeriesPanelChart = ({
   const padding =
     ((transformedData.max - transformedData.min) * paddingPercentage) / 100.0;
 
+  console.log("RERENDER");
+
   return (
-    <div className="w-full h-full flex flex-col gap-2">
+    <div className="w-full h-full flex flex-col gap-1">
       <div className="w-full flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={transformedData.result}>
@@ -92,7 +94,7 @@ const SeriesPanelChart = ({
       </div>
       {data.map((_, index) => (
         <div
-          className="h-10 px-4 text-sm w-full flex items-center justify-end gap-2 border-t"
+          className="h-8 px-4 text-sm w-full flex items-center justify-end gap-2 border-t"
           key={index}
           style={{ color: colors[index], borderColor: colors[index] }}
         >
