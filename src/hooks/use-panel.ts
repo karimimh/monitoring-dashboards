@@ -1,9 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchPanel } from "../services/services";
+import { fetchAllPanels, fetchPanels } from "../services/services";
 
-export const useQueryPanel = (db: string, query: string) => {
+export const usePanelQueries = (db: string, queries: string[]) => {
   return useQuery({
-    queryKey: ["testData", db, query],
-    queryFn: () => fetchPanel(db, query),
+    queryKey: ["testData", db, queries.join(",")],
+    queryFn: () => fetchPanels(db, queries),
+  });
+};
+
+export const useAllPanelQueries = (db: string, queries: string[][]) => {
+  return useQuery({
+    queryKey: ["testData", db, queries.join(",")],
+    queryFn: () => fetchAllPanels(db, queries),
   });
 };

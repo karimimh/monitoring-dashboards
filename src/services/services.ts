@@ -25,3 +25,19 @@ export const fetchPanel = async (
   const parsedData = panelSchema.parse(data);
   return parsedData;
 };
+
+export const fetchPanels = async (
+  db: string,
+  queries: string[]
+): Promise<PanelType[]> => {
+  const promises = queries.map((query) => fetchPanel(db, query));
+  return Promise.all(promises);
+};
+
+export const fetchAllPanels = async (
+  db: string,
+  queries: string[][]
+): Promise<PanelType[][]> => {
+  const promises = queries.map((query) => fetchPanels(db, query));
+  return Promise.all(promises);
+};
