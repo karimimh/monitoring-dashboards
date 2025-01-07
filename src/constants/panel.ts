@@ -1,4 +1,10 @@
 import { PanelApi } from "@/schemas/panel";
+export const EMPTY_PANEL = {
+  colors: [],
+  id: "",
+  queries: [""],
+  title: "",
+};
 
 export const SAMPLE_PANEL: PanelApi = {
   results: [
