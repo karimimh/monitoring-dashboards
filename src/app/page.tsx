@@ -1,14 +1,16 @@
 "use client";
 
-import AddPanel from "@/components/panels/add-panel";
-import SeriesPanel from "@/components/panels/series-panel";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useDatabaseQueries } from "@/hooks/use-panel";
+import Main from "@/components/panels/main";
+import PanelForm, { PanelFormHandle } from "@/components/panels/panel-form";
+import { Button } from "@/components/ui/button";
+import { EMPTY_PANEL } from "@/constants/panel";
 import { Panel } from "@/types/panel";
 import { generateId } from "@/utils/random";
-import { useState } from "react";
+import { PlusIcon } from "lucide-react";
+import { useRef, useState } from "react";
 
 export default function Home() {
+  const panelFormRef = useRef<PanelFormHandle>(null);
   const [panels, setPanels] = useState<Panel[]>([
     {
       title: "حافظه",
@@ -21,10 +23,6 @@ export default function Home() {
       id: generateId(),
     },
   ]);
-  const queryResults = useDatabaseQueries(
-    "influx",
-    panels.map((panel) => panel.queries)
-  );
 
   return (
     <>
@@ -34,26 +32,44 @@ export default function Home() {
       >
         <div className="">پروژه مانیتورینگ (امیرمحمد کریمی)</div>
         <div className="flex-1" />
-        <AddPanel
-          onNewPanel={(newPanel) => setPanels((prev) => [...prev, newPanel])}
-        />
+        <Button
+          className="flex items-center"
+          onClick={() => {
+            panelFormRef.current?.setPanelForm(EMPTY_PANEL);
+            panelFormRef.current?.setIsOpen(true);
+          }}
+          variant="outline"
+        >
+          <PlusIcon className="size-4" />
+          <span>افزودن پنل</span>
+        </Button>
       </header>
-      <main className="absolute w-full px-6 flex-1 grid grid-cols-2 place-items-start gap-4 pt-20 pb-10 bg-slate-200 min-h-screen">
-        {queryResults &&
-          queryResults.map((panelQueryResults, index) =>
-            panelQueryResults.data ? (
-              <SeriesPanel
-                key={panels[index].id}
-                panel={panels[index]}
-                panelData={panelQueryResults.data.filter(
-                  (item) => item !== null
-                )}
-              />
-            ) : (
-              <Skeleton key={panels[index].id} className="w-full h-96" />
-            )
-          )}
-      </main>
+      <Main
+        panels={panels}
+        onEditPanelClick={(p) => {
+          panelFormRef.current?.setPanelForm(p);
+          panelFormRef.current?.setIsOpen(true);
+        }}
+      />
+      <PanelForm
+        ref={panelFormRef}
+        onSubmit={(panelForm: Panel) => {
+          const existingPanelIndex = panels.findIndex(
+            (item) => item.id === panelForm.id
+          );
+          if (existingPanelIndex >= 0) {
+            setPanels((prev) => [
+              ...prev.slice(0, existingPanelIndex),
+              panelForm,
+              ...prev.slice(existingPanelIndex + 1),
+            ]);
+          } else {
+            setPanels((prev) => [...prev, panelForm]);
+          }
+          panelFormRef.current?.setIsOpen(false);
+          panelFormRef.current?.setPanelForm(EMPTY_PANEL);
+        }}
+      />
     </>
   );
 }

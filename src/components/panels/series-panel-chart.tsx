@@ -28,15 +28,12 @@ const SeriesPanelChart = ({
     let max = Number.MIN_VALUE;
     const mean = Array(data.length).fill(0);
     for (let i = 0; i < data[0].length; i++) {
-      const time = new Date(data[0][i][0])
-        .toLocaleString("en-US", {
-          month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })
-        .replace(",", "");
+      const time = new Date(data[0][i][0]).toLocaleString("fa-IR", {
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
       const valuesRecord: { [key: string]: number | null } = {};
       for (let j = 0; j < data.length; j++) {
         valuesRecord[`value${j}`] = data[j][i][1];
@@ -62,7 +59,7 @@ const SeriesPanelChart = ({
   console.log("RERENDER");
 
   return (
-    <div className="w-full h-full flex flex-col gap-1">
+    <div className="w-full h-full flex flex-col">
       <div className="w-full flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={transformedData.result}>
@@ -81,7 +78,6 @@ const SeriesPanelChart = ({
                 <Area
                   key={index}
                   type="linear"
-                  data={transformedData.result}
                   dataKey={`value${index}`}
                   stroke={colors[index]}
                   fill={colors[index]}
@@ -94,7 +90,7 @@ const SeriesPanelChart = ({
       </div>
       {data.map((_, index) => (
         <div
-          className="h-8 px-4 text-sm w-full flex items-center justify-end gap-2 border-t"
+          className="h-8 px-4 text-sm w-full flex items-center gap-2 border-t"
           key={index}
           style={{ color: colors[index], borderColor: colors[index] }}
         >
@@ -103,9 +99,7 @@ const SeriesPanelChart = ({
           <div>Max: </div>
           <div>{transformedData.max.toFixed(2)}</div>
           <div>Mean: </div>
-          <div>
-            {transformedData.mean.map((value) => value.toFixed(2)).join(", ")}
-          </div>
+          <div>{transformedData.mean[index].toFixed(2)}</div>
         </div>
       ))}
     </div>

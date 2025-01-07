@@ -10,9 +10,14 @@ import SeriesPanelChart from "./series-panel-chart";
 interface SeriesPanelProps {
   panel: PanelType;
   panelData: PanelApi[];
+  onEditButtonClick?: () => void;
 }
 
-const SeriesPanel = ({ panelData, panel }: SeriesPanelProps) => {
+const SeriesPanel = ({
+  panelData,
+  panel,
+  onEditButtonClick,
+}: SeriesPanelProps) => {
   const panelValues = useMemo(() => {
     const result = [];
     for (let i = 0; i < panelData.length; i++) {
@@ -28,6 +33,7 @@ const SeriesPanel = ({ panelData, panel }: SeriesPanelProps) => {
       childContainerClassName="p-2"
       className="w-full h-96"
       title={panel.title}
+      onEditButtonClick={onEditButtonClick}
     >
       {panelData.length > 0 ? (
         <SeriesPanelChart
