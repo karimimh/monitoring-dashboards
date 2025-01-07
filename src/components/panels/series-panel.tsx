@@ -1,31 +1,18 @@
 "use client";
 
-import { PanelType } from "@/schemas/panel";
-import { getRandomColor } from "@/utils/color";
-import { useEffect, useMemo, useState } from "react";
-import Panel from "./panel";
-import SeriesPanelChart from "./series-panel-chart";
+import { PanelApi } from "@/schemas/panel";
+import { Panel as PanelType } from "@/types/panel";
+import { useMemo } from "react";
 import { Skeleton } from "../ui/skeleton";
+import PanelCard from "./panel-card";
+import SeriesPanelChart from "./series-panel-chart";
 
 interface SeriesPanelProps {
-  panelData: PanelType[];
+  panel: PanelType;
+  panelData: PanelApi[];
 }
 
-const SeriesPanel = ({ panelData }: SeriesPanelProps) => {
-  const panelName =
-    panelData.at(0)?.results.at(0)?.series.at(0)?.name ??
-    "PANEL NAME NOT FOUND";
-  const [colors, setColors] = useState<string[]>([]);
-
-  useEffect(() => {
-    const generatedColors = panelData
-      .at(0)
-      ?.results.flatMap((panelData) =>
-        panelData.series.map(() => getRandomColor())
-      );
-    if (generatedColors) setColors(generatedColors);
-  }, [panelData]);
-
+const SeriesPanel = ({ panelData, panel }: SeriesPanelProps) => {
   const panelValues = useMemo(() => {
     const result = [];
     for (let i = 0; i < panelData.length; i++) {
@@ -37,21 +24,21 @@ const SeriesPanel = ({ panelData }: SeriesPanelProps) => {
   }, [panelData]);
 
   return (
-    <Panel
+    <PanelCard
       childContainerClassName="p-2"
       className="w-full h-96"
-      title={panelName}
+      title={panel.title}
     >
       {panelData.length > 0 ? (
         <SeriesPanelChart
-          colors={colors}
+          colors={panel.colors}
           data={panelValues}
           paddingPercentage={10}
         />
       ) : (
         <Skeleton className="w-full h-full" />
       )}
-    </Panel>
+    </PanelCard>
   );
 };
 

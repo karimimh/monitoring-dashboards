@@ -1,6 +1,6 @@
-import { PanelType } from "@/schemas/panel";
+import { PanelApi } from "@/schemas/panel";
 
-export const SAMPLE_PANEL: PanelType = {
+export const SAMPLE_PANEL: PanelApi = {
   results: [
     {
       statement_id: 0,
