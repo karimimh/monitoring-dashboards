@@ -1,11 +1,11 @@
-import { PanelType, panelSchema } from "@/schemas/panel";
+import { PanelApi, panelApiSchema } from "@/schemas/panel";
 import axios from "axios";
 import qs from "qs";
 
-export const fetchPanel = async (
+export const executeDatabaseQuery = async (
   db: string,
   query: string
-): Promise<PanelType> => {
+): Promise<PanelApi> => {
   const BASE_URL = `http://ir.snnf.me:8086/query?db=${db}`;
 
   const payload = {
@@ -22,22 +22,6 @@ export const fetchPanel = async (
 
   const data = response.data;
 
-  const parsedData = panelSchema.parse(data);
+  const parsedData = panelApiSchema.parse(data);
   return parsedData;
-};
-
-export const fetchPanels = async (
-  db: string,
-  queries: string[]
-): Promise<PanelType[]> => {
-  const promises = queries.map((query) => fetchPanel(db, query));
-  return Promise.all(promises);
-};
-
-export const fetchAllPanels = async (
-  db: string,
-  queries: string[][]
-): Promise<PanelType[][]> => {
-  const promises = queries.map((query) => fetchPanels(db, query));
-  return Promise.all(promises);
 };

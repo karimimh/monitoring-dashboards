@@ -3,19 +3,19 @@
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
-interface PanelProps {
+interface PanelCardProps {
   title: string;
   className?: string;
   children?: ReactNode;
   childContainerClassName?: string;
 }
 
-const Panel = ({
+const PanelCard = ({
   title,
   className,
   childContainerClassName,
   children,
-}: PanelProps) => {
+}: PanelCardProps) => {
   return (
     <div
       className={cn(
@@ -23,10 +23,14 @@ const Panel = ({
         className
       )}
     >
-      <div className="p-3 pl-10 text-lg font-bold">{title}</div>
-      <div className={cn("flex-1 w-full", childContainerClassName)}>{children}</div>
+      <div className="p-3 pl-10 text-lg font-bold" dir="rtl">
+        {title}
+      </div>
+      <div className={cn("flex-1 w-full", childContainerClassName)}>
+        {children}
+      </div>
     </div>
   );
 };
 
-export default Panel;
+export default PanelCard;

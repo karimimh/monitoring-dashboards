@@ -2,20 +2,14 @@
 
 import AddPanel from "@/components/panels/add-panel";
 import SeriesPanel from "@/components/panels/series-panel";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAllPanelQueries } from "@/hooks/use-panel";
-import { PlusIcon } from "lucide-react";
+import { useDatabaseQueries } from "@/hooks/use-panel";
+import { Panel } from "@/types/panel";
+import { generateId } from "@/utils/random";
 import { useState } from "react";
 
 export default function Home() {
-  const [panels, setPanels] = useState<{ title: string; queries: string[] }[]>([
+  const [panels, setPanels] = useState<Panel[]>([
     {
       title: "حافظه",
       queries: [
@@ -23,9 +17,11 @@ export default function Home() {
         `SELECT mean("load5") FROM "system" WHERE "host" =~ /^docker-telegraf$/ AND time >= 1736102864429ms and time <= 1736189234429ms GROUP BY time(1m) fill(null)`,
         `SELECT mean("load15") FROM "system" WHERE "host" =~ /^docker-telegraf$/ AND time >= 1736102924632ms and time <= 1736189294634ms GROUP BY time(1m) fill(null)`,
       ],
+      colors: ["red", "green", "blue"],
+      id: generateId(),
     },
   ]);
-  const { data: queryResults } = useAllPanelQueries(
+  const queryResults = useDatabaseQueries(
     "influx",
     panels.map((panel) => panel.queries)
   );
@@ -38,28 +34,25 @@ export default function Home() {
       >
         <div className="">پروژه مانیتورینگ (امیرمحمد کریمی)</div>
         <div className="flex-1" />
-
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="flex items-center" variant="outline">
-              <PlusIcon className="size-4" />
-              <span>افزودن پنل</span>
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-h-[70vh] overflow-y-auto" dir="rtl">
-            <DialogTitle className="w-full text-center">افزودن پنل</DialogTitle>
-            <AddPanel
-              onNewPanel={(newPanel) =>
-                setPanels((prev) => [...prev, newPanel])
-              }
-            />
-          </DialogContent>
-        </Dialog>
+        <AddPanel
+          onNewPanel={(newPanel) => setPanels((prev) => [...prev, newPanel])}
+        />
       </header>
-      <main className="absolute w-full px-6 flex-1 grid grid-cols-2 place-items-center gap-4 pt-20 bg-slate-200 min-h-screen">
-        {queryResults?.map((panelData, index) => (
-          <SeriesPanel key={index} panelData={panelData} />
-        )) ?? <Skeleton className="w-full h-full" />}
+      <main className="absolute w-full px-6 flex-1 grid grid-cols-2 place-items-start gap-4 pt-20 pb-10 bg-slate-200 min-h-screen">
+        {queryResults &&
+          queryResults.map((panelQueryResults, index) =>
+            panelQueryResults.data ? (
+              <SeriesPanel
+                key={panels[index].id}
+                panel={panels[index]}
+                panelData={panelQueryResults.data.filter(
+                  (item) => item !== null
+                )}
+              />
+            ) : (
+              <Skeleton key={panels[index].id} className="w-full h-96" />
+            )
+          )}
       </main>
     </>
   );

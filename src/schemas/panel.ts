@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const panelSchema = z.object({
+export const panelApiSchema = z.object({
   results: z.array(
     z.object({
       statement_id: z.number(),
@@ -17,4 +17,4 @@ export const panelSchema = z.object({
   ),
 });
 
-export type PanelType = z.infer<typeof panelSchema>;
+export type PanelApi = z.infer<typeof panelApiSchema>;
