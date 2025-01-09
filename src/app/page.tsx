@@ -1,6 +1,7 @@
 "use client";
 
 import AppSidebar, { AppSidebarHandle } from "@/components/app-sidebar";
+import DateRangePicker from "@/components/date-range-picker";
 import Main from "@/components/panels/main";
 import PanelForm, { PanelFormHandle } from "@/components/panels/panel-form";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,8 @@ import { useRef, useState } from "react";
 export default function Home() {
   const panelFormRef = useRef<PanelFormHandle>(null);
   const sidebarRef = useRef<AppSidebarHandle>(null);
+  const [fromDate, setFromDate] = useState<number | undefined>(1736102864429);
+  const [toDate, setToDate] = useState<number | undefined>(1736189234429);
   const [panels, setPanels] = useState<Panel[]>([
     {
       title: "حافظه",
@@ -28,15 +31,34 @@ export default function Home() {
   return (
     <>
       <header
-        className="h-14 bg-white shadow-md border-b flex items-center px-4 font-bold text-lg fixed top-0 left-0 right-0 z-10"
+        className="h-14 bg-white shadow-md gap-2 border-b flex items-center px-4 font-bold text-lg fixed top-0 left-0 right-0 z-10"
         dir="rtl"
         id="header"
       >
         <button onClick={() => sidebarRef.current?.toggleSidebar()}>
-          <MenuIcon className="size-4" />
+          <MenuIcon className="size-6" />
         </button>
         <div className="mr-2">پروژه دانا</div>
         <div className="flex-1" />
+        <DateRangePicker
+          fromDate={fromDate}
+          onChange={(fromDate, toDate) => {
+            setFromDate(fromDate);
+            setToDate(toDate);
+            setPanels((prev) =>
+              prev.map((panel) => ({
+                ...panel,
+                queries: panel.queries.map((query) =>
+                  query.replace(
+                    /time >= \d+ms and time <= \d+ms/g,
+                    `time >= ${fromDate}ms and time <= ${toDate}ms`
+                  )
+                ),
+              }))
+            );
+          }}
+          toDate={toDate}
+        />
         <Button
           className="flex items-center"
           onClick={() => {
@@ -50,6 +72,7 @@ export default function Home() {
         </Button>
       </header>
       <AppSidebar ref={sidebarRef} />
+
       <Main
         panels={panels}
         onEditPanelClick={(p) => {
