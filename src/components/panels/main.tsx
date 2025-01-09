@@ -8,9 +8,10 @@ import { Panel } from "@/types/panel";
 interface MainProps {
   panels: Panel[];
   onEditPanelClick: (panel: Panel) => void;
+  onDeleteButtonClick: (panel: Panel) => void;
 }
 
-const Main = ({ panels, onEditPanelClick }: MainProps) => {
+const Main = ({ panels, onEditPanelClick, onDeleteButtonClick }: MainProps) => {
   const queryResults = useDatabaseQueries(
     "influx",
     panels.map((panel) => panel.queries)
@@ -25,6 +26,7 @@ const Main = ({ panels, onEditPanelClick }: MainProps) => {
               panel={panels[index]}
               panelData={panelQueryResults.data.filter((item) => item !== null)}
               onEditButtonClick={() => onEditPanelClick({ ...panels[index] })}
+              onDeleteButtonClick={() => onDeleteButtonClick(panels[index])}
             />
           ) : (
             <Skeleton key={panels[index].id} className="w-full h-96" />

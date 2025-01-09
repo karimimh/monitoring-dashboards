@@ -1,5 +1,6 @@
 "use client";
 
+import { Panel } from "@/types/panel";
 import { useMemo } from "react";
 import {
   Area,
@@ -12,12 +13,14 @@ import {
 } from "recharts";
 
 interface SeriesPanelChartProps {
+  panel: Panel;
   data: [string, number | null][][];
   colors: string[];
   paddingPercentage?: number;
 }
 
 const SeriesPanelChart = ({
+  panel,
   data,
   colors,
   paddingPercentage = 10,
@@ -56,7 +59,10 @@ const SeriesPanelChart = ({
   const padding =
     ((transformedData.max - transformedData.min) * paddingPercentage) / 100.0;
 
-  console.log("RERENDER");
+  const extractQueryName = (query: string) => {
+    const match = query.match(/SELECT\s+(.+?)\s+FROM/i);
+    return match ? match[1] : "---";
+  };
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -88,20 +94,33 @@ const SeriesPanelChart = ({
           </AreaChart>
         </ResponsiveContainer>
       </div>
-      {data.map((_, index) => (
-        <div
-          className="h-8 px-4 text-sm w-full flex items-center gap-2 border-t"
-          key={index}
-          style={{ color: colors[index], borderColor: colors[index] }}
-        >
-          <div>Min: </div>
-          <div>{transformedData.min.toFixed(2)}</div>
-          <div>Max: </div>
-          <div>{transformedData.max.toFixed(2)}</div>
-          <div>Mean: </div>
-          <div>{transformedData.mean[index].toFixed(2)}</div>
-        </div>
-      ))}
+      <div className="w-full pl-10 flex justify-stretch">
+        <table className="w-full text-left text-xs">
+          <thead className="border-b">
+            <tr>
+              <th>کوئری</th>
+              <th>کمینه</th>
+              <th>بیشینه</th>
+              <th>متوسط</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((_, index) => (
+              <tr
+                key={index}
+                style={{ color: colors[index], borderColor: colors[index] }}
+              >
+                <td className="border-r truncate">
+                  {extractQueryName(panel.queries[index])}
+                </td>
+                <td>{transformedData.min.toFixed(2)}</td>
+                <td>{transformedData.max.toFixed(2)}</td>
+                <td>{transformedData.mean[index].toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

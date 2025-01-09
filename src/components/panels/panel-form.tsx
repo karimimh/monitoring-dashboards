@@ -1,13 +1,13 @@
 "use client";
 
-import { EMPTY_PANEL } from "@/constants/panel";
+import { Panel } from "@/types/panel";
+import { generateEmptyPanel } from "@/utils/random";
 import { PlusCircle } from "lucide-react";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import AutogrowingTextarea from "../ui/autogrowing-textarea";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { Input } from "../ui/input";
-import { Panel } from "@/types/panel";
 
 interface PanelFormProps {
   onSubmit: (panelForm: Panel) => void;
@@ -20,7 +20,7 @@ export interface PanelFormHandle {
 
 const PanelForm = forwardRef<PanelFormHandle, PanelFormProps>(
   ({ onSubmit: onNewPanel }, ref) => {
-    const [value, setValue] = useState<Panel>(EMPTY_PANEL);
+    const [value, setValue] = useState<Panel>(generateEmptyPanel());
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -43,10 +43,10 @@ const PanelForm = forwardRef<PanelFormHandle, PanelFormProps>(
               <div className="w-full flex items-center gap-2" key={index}>
                 <div className="w-32">کوئری {index + 1}</div>
                 <AutogrowingTextarea
-                  className="flex-1 h-7 font-sans"
+                  className="flex-1 h-7 font-sans text-xs"
                   value={query}
-                  minRows={3}
-                  maxRows={3}
+                  minRows={4}
+                  maxRows={5}
                   onChange={(newQuery) => {
                     const prev = value.queries;
                     const newQueries = [
