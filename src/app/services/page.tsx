@@ -1,6 +1,8 @@
 "use client";
 
-const ServicesPage = () => {
+interface ServicesPageProps {}
+
+const ServicesPage = ({}: ServicesPageProps) => {
   return <div>ServicesPage</div>;
 };
 
