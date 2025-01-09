@@ -11,7 +11,7 @@ export default function RootLayout({
   const queryClient = new QueryClient();
   return (
     <html lang="en">
-      <body className="antialiased font-yekan bg-slate-200">
+      <body className="antialiased font-yekan bg-slate-200 relative">
         <QueryClientProvider client={queryClient}>
           {children}
         </QueryClientProvider>

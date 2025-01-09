@@ -11,12 +11,14 @@ interface SeriesPanelProps {
   panel: PanelType;
   panelData: PanelApi[];
   onEditButtonClick?: () => void;
+  onDeleteButtonClick?: () => void;
 }
 
 const SeriesPanel = ({
   panelData,
   panel,
   onEditButtonClick,
+  onDeleteButtonClick,
 }: SeriesPanelProps) => {
   const panelValues = useMemo(() => {
     const result = [];
@@ -34,9 +36,11 @@ const SeriesPanel = ({
       className="w-full h-96"
       title={panel.title}
       onEditButtonClick={onEditButtonClick}
+      onDeleteButtonClick={onDeleteButtonClick}
     >
       {panelData.length > 0 ? (
         <SeriesPanelChart
+          panel={panel}
           colors={panel.colors}
           data={panelValues}
           paddingPercentage={10}
