@@ -1,4 +1,5 @@
 import { PanelApi } from "@/schemas/panel";
+import { Variable } from "@/schemas/variable";
 import { executeDatabaseQuery } from "@/services/services";
 import { useQueries } from "@tanstack/react-query";
 
@@ -11,14 +12,27 @@ type UseDatabaseQueriesResult = {
 
 export const useDatabaseQueries = (
   db: string,
-  queries: string[][]
+  queries: string[][],
+  variables: Variable[]
 ): UseDatabaseQueriesResult => {
+  const replaceQueryVariables = (
+    query: string,
+    variables: Variable[]
+  ): string => {
+    // replace variable in query. they start with $ and end with space or )
+    return variables.reduce((acc, { name, query: value }) => {
+      return acc.replace(new RegExp(`\\$${name}(\\s|\\))`, "g"), value + "$1");
+    }, query);
+  };
+
   const results = useQueries({
     queries: queries.map((queryList) => ({
       queryKey: ["databaseQuery", db, queryList],
       queryFn: async () => {
         const results = await Promise.allSettled(
-          queryList.map((query) => executeDatabaseQuery(db, query))
+          queryList.map((query) =>
+            executeDatabaseQuery(db, replaceQueryVariables(query, variables))
+          )
         );
 
         return results.map((result) =>

@@ -2,19 +2,23 @@
 
 import AppSidebar, { AppSidebarHandle } from "@/components/app-sidebar";
 import DateRangePicker from "@/components/date-range-picker";
-import Main from "@/components/panels/main";
+import PanelCards from "@/components/panels/panel-cards";
 import PanelForm, { PanelFormHandle } from "@/components/panels/panel-form";
 import { Button } from "@/components/ui/button";
+import Variables, { VariablesHandle } from "@/components/variables";
+import { Variable } from "@/schemas/variable";
 import { Panel } from "@/types/panel";
 import { generateEmptyPanel, generateId } from "@/utils/random";
-import { MenuIcon, PlusIcon } from "lucide-react";
-import { useRef, useState } from "react";
+import { MenuIcon, PlusIcon, VariableIcon } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 
 export default function Home() {
   const panelFormRef = useRef<PanelFormHandle>(null);
+  const variablesRef = useRef<VariablesHandle>(null);
   const sidebarRef = useRef<AppSidebarHandle>(null);
   const [fromDate, setFromDate] = useState<number | undefined>(1736102864429);
   const [toDate, setToDate] = useState<number | undefined>(1736189234429);
+  const [variables, setVariables] = useState<Variable[]>([]);
   const [panels, setPanels] = useState<Panel[]>([
     {
       title: "حافظه",
@@ -27,6 +31,26 @@ export default function Home() {
       id: generateId(),
     },
   ]);
+
+  const replaceQueryDates = useCallback(
+    (query: string): string => {
+      if (!/time >= \d+ms and time <= \d+ms/.test(query)) {
+        if (/GROUP BY/.test(query)) {
+          query = query.replace(
+            /GROUP BY/,
+            `time >= ${fromDate}ms and time <= ${toDate}ms GROUP BY`
+          );
+        } else {
+          query = `${query} time >= ${fromDate}ms and time <= ${toDate}ms GROUP BY time(1m) fill(null)`;
+        }
+      }
+      return query.replace(
+        /time >= \d+ms and time <= \d+ms/g,
+        `time >= ${fromDate}ms and time <= ${toDate}ms`
+      );
+    },
+    [fromDate, toDate]
+  );
 
   return (
     <>
@@ -48,17 +72,23 @@ export default function Home() {
             setPanels((prev) =>
               prev.map((panel) => ({
                 ...panel,
-                queries: panel.queries.map((query) =>
-                  query.replace(
-                    /time >= \d+ms and time <= \d+ms/g,
-                    `time >= ${fromDate}ms and time <= ${toDate}ms`
-                  )
-                ),
+                queries: panel.queries.map(replaceQueryDates),
               }))
             );
           }}
           toDate={toDate}
         />
+        <Button
+          className="flex items-center"
+          onClick={() => {
+            variablesRef.current?.setIsOpen(true);
+          }}
+          variant="outline"
+        >
+          <VariableIcon className="size-4" />
+          <span>متغیرها</span>
+        </Button>
+
         <Button
           className="flex items-center"
           onClick={() => {
@@ -73,8 +103,9 @@ export default function Home() {
       </header>
       <AppSidebar ref={sidebarRef} />
 
-      <Main
+      <PanelCards
         panels={panels}
+        variables={variables}
         onEditPanelClick={(p) => {
           panelFormRef.current?.setPanelForm(p);
           panelFormRef.current?.setIsOpen(true);
@@ -87,6 +118,14 @@ export default function Home() {
               ...prev.slice(index + 1),
             ]);
           }
+        }}
+      />
+      <Variables
+        ref={variablesRef}
+        value={variables}
+        onSubmit={(newVariables) => {
+          variablesRef.current?.setIsOpen(false);
+          setVariables(newVariables);
         }}
       />
       <PanelForm
