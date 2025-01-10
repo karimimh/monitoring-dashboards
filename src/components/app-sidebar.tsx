@@ -3,22 +3,12 @@
 import { cn } from "@/lib/utils";
 import { BellIcon, LayoutDashboardIcon, ServerIcon } from "lucide-react";
 import Link from "next/link";
-import { forwardRef, useImperativeHandle, useState } from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface AppSidebarProps {}
-
-export interface AppSidebarHandle {
-  toggleSidebar: () => void;
+interface AppSidebarProps {
+  isOpen: boolean;
 }
 
-const AppSidebar = forwardRef<AppSidebarHandle, AppSidebarProps>(({}, ref) => {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-
-  useImperativeHandle(ref, () => ({
-    toggleSidebar: () => setSidebarOpen((prev) => !prev),
-  }));
-
+const AppSidebar = ({ isOpen }: AppSidebarProps) => {
   const items = [
     {
       icon: LayoutDashboardIcon,
@@ -40,7 +30,7 @@ const AppSidebar = forwardRef<AppSidebarHandle, AppSidebarProps>(({}, ref) => {
     <aside
       className={cn(
         "w-[18rem] z-10 fixed px-4 py-6 transition-transform ease-out transform bg-white right-0 top-14 bottom-0 border-l flex flex-col justify-start items-stretch overflow-y-auto shadow-md",
-        isSidebarOpen ? "translate-x-0" : "translate-x-[18rem]"
+        isOpen ? "translate-x-0" : "translate-x-[18rem]"
       )}
       dir="rtl"
     >
@@ -56,8 +46,6 @@ const AppSidebar = forwardRef<AppSidebarHandle, AppSidebarProps>(({}, ref) => {
       ))}
     </aside>
   );
-});
-
-AppSidebar.displayName = "AppSidebar";
+};
 
 export default AppSidebar;

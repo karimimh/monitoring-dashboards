@@ -2,7 +2,7 @@
 
 import { Panel } from "@/types/panel";
 import { generateEmptyPanel } from "@/utils/random";
-import { PlusIcon, VariableIcon } from "lucide-react";
+import { PlusIcon, SaveIcon, VariableIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useCallback } from "react";
 import DateRangePicker from "./date-range-picker";
@@ -10,6 +10,7 @@ import { PanelFormHandle } from "./panels/panel-form";
 import { Button } from "./ui/button";
 import { VariablesHandle } from "./variables";
 import { createPortal } from "react-dom";
+import { useCreateDashboard } from "@/hooks/use-dashboard";
 
 interface DashboardHeaderProps {
   fromDate: number | undefined;
@@ -31,6 +32,8 @@ const DashboardHeader = ({
   variablesRef,
 }: DashboardHeaderProps) => {
   const pathname = usePathname();
+  const { mutate: createDashboard } = useCreateDashboard();
+
   const replaceQueryDates = useCallback(
     (query: string): string => {
       if (!/time >= \d+ms and time <= \d+ms/.test(query)) {
@@ -54,6 +57,29 @@ const DashboardHeader = ({
   return headerTag
     ? createPortal(
         <>
+          {pathname === "/" ? (
+            <>
+              <Button
+                className="flex items-center"
+                onClick={() => {
+                  panelFormRef?.current?.setPanelForm(generateEmptyPanel());
+                  panelFormRef?.current?.setIsOpen(true);
+                }}
+                variant="outline"
+              >
+                <PlusIcon className="size-4" />
+                <span>افزودن پنل</span>
+              </Button>
+              <Button
+                className="flex items-center"
+                onClick={() => {}}
+                variant="outline"
+              >
+                <SaveIcon className="size-4" />
+                <span>ذخیره داشبورد</span>
+              </Button>
+            </>
+          ) : null}
           <div className="flex-1" />
           {pathname === "/" ? (
             <>
@@ -71,7 +97,7 @@ const DashboardHeader = ({
                 }}
                 toDate={toDate}
               />
-              <Button
+              {/* <Button
                 className="flex items-center"
                 onClick={() => {
                   variablesRef?.current?.setIsOpen(true);
@@ -80,18 +106,7 @@ const DashboardHeader = ({
               >
                 <VariableIcon className="size-4" />
                 <span>متغیرها</span>
-              </Button>
-              <Button
-                className="flex items-center"
-                onClick={() => {
-                  panelFormRef?.current?.setPanelForm(generateEmptyPanel());
-                  panelFormRef?.current?.setIsOpen(true);
-                }}
-                variant="outline"
-              >
-                <PlusIcon className="size-4" />
-                <span>افزودن پنل</span>
-              </Button>
+              </Button> */}
             </>
           ) : null}
         </>,
