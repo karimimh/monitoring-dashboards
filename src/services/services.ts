@@ -25,3 +25,26 @@ export const executeDatabaseQuery = async (
   const parsedData = panelApiSchema.parse(data);
   return parsedData;
 };
+
+export const executeVariableQuery = async (
+  db: string,
+  query: string
+): Promise<string> => {
+  const BASE_URL = `http://ir.snnf.me:8086/query?db=${db}`;
+
+  const payload = {
+    q: query,
+  };
+
+  const response = await axios.post(BASE_URL, qs.stringify(payload), {
+    headers: {
+      Accept: "application/json",
+      Authorization: "Token testtest",
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
+
+  const data = response.data;
+
+  return data;
+};
