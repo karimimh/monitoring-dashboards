@@ -25,7 +25,7 @@ const PanelCards = ({
     variables
   );
   return (
-    <main className="absolute w-full px-6 flex-1 grid grid-cols-2 place-items-start gap-4 pt-20 pb-10 bg-slate-200 min-h-screen">
+    <div className="grid grid-cols-1 lg:grid-cols-2 place-items-start gap-4 pt-6 pb-10 px-6">
       {queryResults &&
         queryResults.map((panelQueryResults, index) =>
           panelQueryResults.data ? (
@@ -40,7 +40,7 @@ const PanelCards = ({
             <Skeleton key={panels[index].id} className="w-full h-96" />
           )
         )}
-    </main>
+    </div>
   );
 };
 
