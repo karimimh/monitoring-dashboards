@@ -3,7 +3,7 @@
 interface ServicesPageProps {}
 
 const ServicesPage = ({}: ServicesPageProps) => {
-  return <div>ServicesPage</div>;
+  return <div className="pt-20">ServicesPage</div>;
 };
 
 export default ServicesPage;

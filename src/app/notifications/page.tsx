@@ -1,8 +1,7 @@
 "use client";
 
-
 const NotificationsPage = () => {
-  return <div>NotificationsPage</div>;
+  return <div className="pt-20">NotificationsPage</div>;
 };
 
 export default NotificationsPage;
