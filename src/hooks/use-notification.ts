@@ -37,7 +37,7 @@ export const useAllNotificaionRules = () => {
 export const useCreateNotificationEndpoint = () => {
   return useMutation({
     mutationFn: async (data: NotificationEndpoint) => {
-      await createNotificationEndpoint(data.name, data.send_via, data.chat_id);
+      await createNotificationEndpoint(data.name, data.send_via);
     },
   });
 };

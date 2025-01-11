@@ -13,7 +13,7 @@ interface DropdownButtonProps {
   items: {
     title: string;
     icon: LucideIcon;
-    onClick: (e) => void;
+    onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     className?: string;
   }[];
   side?: "left" | "right" | "top" | "bottom";

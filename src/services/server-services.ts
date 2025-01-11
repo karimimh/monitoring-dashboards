@@ -9,7 +9,7 @@ export const getAllServers = async () => {
 };
 
 export const createServer = async (server: Server) => {
-  const { config, ip, name, port, type } = server;
+  const { config, ip, port, type } = server;
   const serverTypeEndpointMap = {
     SNMP: `${SERVER_CREATE_URL}/snmp`,
     PULL: `${SERVER_CREATE_URL}/prometheus`,
