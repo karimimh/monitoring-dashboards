@@ -1,8 +1,9 @@
 import { EMPTY_PANEL } from "@/constants/panel";
 import { Panel } from "@/types/panel";
+import * as crypto from "crypto";
 
 export function generateId(): string {
-  return `${Date.now()}-${Math.floor(Math.random() * 100000)}`;
+  return crypto.randomBytes(8).toString("hex");
 }
 
 export function generateEmptyPanel(): Panel {
