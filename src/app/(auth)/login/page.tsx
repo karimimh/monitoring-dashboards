@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { login } from "@/services/auth-services";
-import axios from "axios";
+import { httpClient } from "@/services/http-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -21,9 +21,7 @@ const LoginPage = () => {
         localStorage.setItem("token", token);
         localStorage.setItem("username", username);
         localStorage.setItem("email", email);
-        axios.defaults.headers.common["Authorization"] = `Token ${token}`;
-        axios.defaults.headers.common["Content-Type"] = "application/json";
-        axios.defaults.headers.common["Accept"] = "application/json";
+        httpClient.defaults.headers.common["Authorization"] = token;
         router.push("/dashboards");
       } else alert("خطا در ورود");
     } catch (err) {

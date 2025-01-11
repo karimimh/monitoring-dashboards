@@ -1,11 +1,13 @@
 "use client";
 
 import LoadingIndicator from "@/components/ui/loading-indicator";
+import { httpClient } from "@/services/http-client";
 import { useEffect } from "react";
 
 const LogoutPage = () => {
   useEffect(() => {
     localStorage.removeItem("token");
+    httpClient.defaults.headers.common["Authorization"] = "";
     setTimeout(() => {
       location.href = "/login";
     }, 1000);

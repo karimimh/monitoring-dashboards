@@ -14,7 +14,7 @@ const DateRangePicker = ({
   toDate,
 }: DateRangePickerProps) => {
   return (
-    <div className="flex flex-row-reverse font-normal text-sm gap-1 items-center">
+    <div className="flex flex-row font-normal text-sm gap-1 items-center">
       <div>از تاریخ </div>
       <PersianDateTimePicker
         value={fromDate ?? null}

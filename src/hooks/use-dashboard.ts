@@ -2,6 +2,7 @@ import {
   createDashboard,
   getAllDashboards,
   getDashboard,
+  saveDashboard,
 } from "@/services/dashboard-services";
 import { Dashboard } from "@/types/dashboard";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -23,5 +24,12 @@ export const useCreateDashboard = () => {
     mutationKey: ["create-dashboard"],
     mutationFn: (dashboard: Dashboard) =>
       createDashboard(dashboard.name, dashboard.panels),
+  });
+};
+
+export const useSaveDashboard = () => {
+  return useMutation({
+    mutationKey: ["save-dashboard"],
+    mutationFn: (dashboard: Dashboard) => saveDashboard(dashboard),
   });
 };

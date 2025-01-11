@@ -13,14 +13,16 @@ interface DropdownButtonProps {
   items: {
     title: string;
     icon: LucideIcon;
-    onClick: () => void;
+    onClick: (e) => void;
     className?: string;
   }[];
+  side?: "left" | "right" | "top" | "bottom";
 }
 
 export default function DropdownButton({
   className,
   items,
+  side = "right",
 }: DropdownButtonProps) {
   return (
     <DropdownMenu>
@@ -33,7 +35,7 @@ export default function DropdownButton({
           <EllipsisVertical size={16} strokeWidth={2} aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent side="right">
+      <DropdownMenuContent side={side}>
         {items.map(
           ({ title, icon: Icon, onClick, className: itemClassName }) => (
             <DropdownMenuItem

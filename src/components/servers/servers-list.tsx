@@ -5,41 +5,47 @@ import DropdownButton from "@/components/ui/dropdown-button";
 // add server ( name, ip , port , config <text box >, dropdown for type < snmp, pull, push, wmi > )
 
 import { Trash } from "lucide-react";
+import { Skeleton } from "../ui/skeleton";
 
 interface ServersListProps {
   data: any;
+  isLoading: boolean;
 }
 
-const ServersList = ({ data }: ServersListProps) => {
+const ServersList = ({ data, isLoading }: ServersListProps) => {
   return (
     <div className="w-full mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-      {data?.map((server) => (
-        <div
-          key={server.id}
-          className="flex w-full items-center justify-between p-4 bg-white rounded-md shadow-md border"
-          dir="rtl"
-        >
-          <div className="flex flex-col gap-2">
-            <div className="font-bold">{server.name}</div>
-            <div className="">
-              {server.status === "active" ? "فعال" : server.status}
+      {isLoading ? (
+        <Skeleton className="w-96 h-64" />
+      ) : (
+        data?.map((server) => (
+          <div
+            key={server.id}
+            className="flex w-full items-center justify-between p-4 bg-white rounded-md shadow-md border"
+            dir="rtl"
+          >
+            <div className="flex flex-col gap-2">
+              <div className="font-bold">{server.name}</div>
+              <div className="">
+                {server.status === "active" ? "فعال" : server.status}
+              </div>
+              <div className="text-gray-400 text-sm">
+                {server.latestCompleted}
+              </div>
             </div>
-            <div className="text-gray-400 text-sm">
-              {server.latestCompleted}
-            </div>
+            <DropdownButton
+              items={[
+                {
+                  icon: Trash,
+                  onClick: async () => {},
+                  title: "حذف",
+                  className: "text-red-600",
+                },
+              ]}
+            />
           </div>
-          <DropdownButton
-            items={[
-              {
-                icon: Trash,
-                onClick: async () => {},
-                title: "حذف",
-                className: "text-red-600",
-              },
-            ]}
-          />
-        </div>
-      )) ?? "در حال بارگیری..."}
+        ))
+      )}
     </div>
   );
 };

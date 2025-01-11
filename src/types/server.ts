@@ -3,5 +3,5 @@ export type Server = {
   ip: string;
   port: string;
   config: string;
-  type: "SNMP" | "PULL" | "PUSH" | "WMI";
+  type: "SNMP" | "PULL" | "PUSH";
 };

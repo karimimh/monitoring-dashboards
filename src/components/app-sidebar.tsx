@@ -13,7 +13,7 @@ const AppSidebar = ({ isOpen }: AppSidebarProps) => {
     {
       icon: LayoutDashboardIcon,
       title: "داشبوردها",
-      href: "/",
+      href: "/dashboards",
     },
     {
       icon: ServerIcon,

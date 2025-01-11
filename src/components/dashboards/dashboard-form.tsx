@@ -1,9 +1,10 @@
 "use client";
 
 import { Dashboard } from "@/types/dashboard";
+import { generateId } from "@/utils/random";
 import { useState } from "react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface DashboardFormProps {
   onSubmit: (db: Dashboard) => void;
@@ -27,7 +28,7 @@ const DashboardForm = ({ onSubmit }: DashboardFormProps) => {
           onClick={() => {
             onSubmit({
               name: dashboardName,
-              id: Math.floor(Math.random() * 1000),
+              id: generateId(),
               panels: [],
               variables: [],
             });

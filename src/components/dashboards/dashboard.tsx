@@ -1,46 +1,40 @@
 "use client";
 
-import { PlusIcon } from "lucide-react";
-import PanelCards from "./panels/panel-cards";
-import { Button } from "./ui/button";
-import Variables, { VariablesHandle } from "./variables";
-import PanelForm, { PanelFormHandle } from "./panels/panel-form";
-import { generateEmptyPanel } from "@/utils/random";
-import { Panel } from "@/types/panel";
 import { Variable } from "@/schemas/variable";
+import { Dashboard as DashboardObject } from "@/types/dashboard";
+import { Panel } from "@/types/panel";
+import { generateEmptyPanel } from "@/utils/random";
+import { useRef, useState } from "react";
+import PanelCards from "../panels/panel-cards";
+import PanelForm, { PanelFormHandle } from "../panels/panel-form";
+import Variables, { VariablesHandle } from "../variables";
+import DashboardHeader from "./dashboard-header";
 
 interface DashboardProps {
-  variablesRef: React.RefObject<VariablesHandle | null>;
-  selectedDashboardId: string;
-  panelFormRef: React.RefObject<PanelFormHandle | null>;
-  variables: Variable[];
-  panels: Panel[];
-  setVariables: React.Dispatch<React.SetStateAction<Variable[]>>;
-  setPanels: React.Dispatch<React.SetStateAction<Panel[]>>;
+  selectedDashboard: DashboardObject;
 }
 
-const Dashboard = ({
-  variablesRef,
-  panelFormRef,
-  variables,
-  panels,
-  setVariables,
-  setPanels,
-}: DashboardProps) => {
+const Dashboard = ({ selectedDashboard }: DashboardProps) => {
+  const panelFormRef = useRef<PanelFormHandle>(null);
+  const variablesRef = useRef<VariablesHandle>(null);
+  const [fromDate, setFromDate] = useState<number | undefined>(1736102864429);
+  const [toDate, setToDate] = useState<number | undefined>(1736189234429);
+  const [variables, setVariables] = useState<Variable[]>(
+    selectedDashboard.variables
+  );
+  const [panels, setPanels] = useState<Panel[]>(selectedDashboard.panels);
   return (
     <>
-      <Button
-        className="absolute top-[4.5rem] right-6 flex items-center"
-        onClick={() => {
-          panelFormRef?.current?.setPanelForm(generateEmptyPanel());
-          panelFormRef?.current?.setIsOpen(true);
-        }}
-        dir="rtl"
-        variant="outline"
-      >
-        <PlusIcon className="size-4" />
-        <span>افزودن پنل</span>
-      </Button>
+      <DashboardHeader
+        fromDate={fromDate}
+        setFromDate={setFromDate}
+        setPanels={setPanels}
+        panelFormRef={panelFormRef}
+        toDate={toDate}
+        setToDate={setToDate}
+        dashboard={selectedDashboard}
+        panels={panels}
+      />
       <PanelCards
         panels={panels}
         variables={variables}
