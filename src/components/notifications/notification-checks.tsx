@@ -4,26 +4,32 @@ import axios from "axios";
 import { Trash } from "lucide-react";
 import DropdownButton from "../ui/dropdown-button";
 
-interface NotificationEndpointsProps {
+interface NotificationChecksProps {
   data: any;
 }
 
-const NotificationEndpoints = ({ data }: NotificationEndpointsProps) => {
+const NotificationChecks = ({ data }: NotificationChecksProps) => {
   return (
     <div className="w-full mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-      {data?.map((endpoint) => (
+      {data?.map((check) => (
         <div
-          key={endpoint.id}
+          key={check.id}
           className="flex w-full items-center justify-between p-4 bg-white rounded-md shadow-md border"
         >
-          {endpoint.name}
+          <div className="flex flex-col gap-2">
+            <div className="font-bold">{check.name}</div>
+            <div className="">
+              {check.status === "active" ? "فعال" : check.status}
+            </div>
+            <div className="text-gray-400 text-sm">{check.latestCompleted}</div>
+          </div>
           <DropdownButton
             items={[
               {
                 icon: Trash,
                 onClick: async () => {
                   await axios.delete(
-                    `http://ir.snnf.me:8086/api/v2/notificationEndpoints/${endpoint.id}`,
+                    `http://ir.snnf.me:8086/api/v2/checks/${check.id}`,
                     {
                       headers: {
                         Accept: "application/json",
@@ -44,4 +50,4 @@ const NotificationEndpoints = ({ data }: NotificationEndpointsProps) => {
   );
 };
 
-export default NotificationEndpoints;
+export default NotificationChecks;

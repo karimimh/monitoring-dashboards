@@ -10,6 +10,7 @@ export type NotificationRule = {
         from: string;
         to: string;
       };
+  endpointId: string;
 };
 
 export type NotificationEndpoint = {

@@ -5,12 +5,14 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+import { useAllNotificationEndpoints } from "@/hooks/use-notification";
 
 interface NotificationRuleFormProps {
   onSubmit: (notifRule: NotificationRule) => void;
 }
 
 const NotificationRuleForm = ({ onSubmit }: NotificationRuleFormProps) => {
+  const { data: notificationEndpoints } = useAllNotificationEndpoints();
   const [ruleName, setRuleName] = useState<string>("");
   const [conditionType, setConditionType] = useState<
     "is_equal_to" | "changes_from_to"
@@ -18,6 +20,7 @@ const NotificationRuleForm = ({ onSubmit }: NotificationRuleFormProps) => {
   const [conditionValue, setConditionValue] = useState<string>("");
   const [conditionFrom, setConditionFrom] = useState<string>("");
   const [conditionTo, setConditionTo] = useState<string>("");
+  const [selectedEndpoint, setSelectedEndpoint] = useState<string>("");
 
   const conditionTypeItems = [
     {
@@ -184,6 +187,24 @@ const NotificationRuleForm = ({ onSubmit }: NotificationRuleFormProps) => {
             </>
           )}
         </div>
+        <div className="font-bold">مقصد اعلان</div>
+        <Select
+          dir="rtl"
+          value={selectedEndpoint}
+          onValueChange={(v) => setSelectedEndpoint(v)}
+        >
+          <SelectTrigger className="w-48 h-10">
+            {notificationEndpoints?.find((item) => item.id === selectedEndpoint)
+              ?.name ?? "انتخاب کنید ..."}
+          </SelectTrigger>
+          <SelectContent>
+            {notificationEndpoints?.map(({ id, name }) => (
+              <SelectItem key={id} value={id}>
+                {name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Button
           className="w-36"
           disabled={
@@ -198,6 +219,7 @@ const NotificationRuleForm = ({ onSubmit }: NotificationRuleFormProps) => {
                 from: conditionFrom,
                 to: conditionTo,
               },
+              endpointId: selectedEndpoint,
             })
           }
         >
