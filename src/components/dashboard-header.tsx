@@ -1,16 +1,18 @@
 "use client";
 
+import { useAllDashboards, useCreateDashboard } from "@/hooks/use-dashboard";
 import { Panel } from "@/types/panel";
-import { generateEmptyPanel } from "@/utils/random";
-import { PlusIcon, SaveIcon, VariableIcon } from "lucide-react";
+import { PlusIcon, SaveIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { createPortal } from "react-dom";
+import DashboardForm from "./dashboard-form";
 import DateRangePicker from "./date-range-picker";
 import { PanelFormHandle } from "./panels/panel-form";
 import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
 import { VariablesHandle } from "./variables";
-import { createPortal } from "react-dom";
-import { useCreateDashboard } from "@/hooks/use-dashboard";
 
 interface DashboardHeaderProps {
   fromDate: number | undefined;
@@ -20,6 +22,8 @@ interface DashboardHeaderProps {
   setToDate?: (toDate: number | undefined) => void;
   panelFormRef?: React.RefObject<PanelFormHandle | null>;
   variablesRef?: React.RefObject<VariablesHandle | null>;
+  selectedDashboardId?: string;
+  setSelectedDashboardId: (v: string) => void;
 }
 
 const DashboardHeader = ({
@@ -30,9 +34,12 @@ const DashboardHeader = ({
   toDate,
   setToDate,
   variablesRef,
+  selectedDashboardId,
+  setSelectedDashboardId,
 }: DashboardHeaderProps) => {
   const pathname = usePathname();
-  const { mutate: createDashboard } = useCreateDashboard();
+  // const { mutate: createDashboard } = useCreateDashboard();
+  // const { data: allDashboards } = useAllDashboards();
 
   const replaceQueryDates = useCallback(
     (query: string): string => {
@@ -53,31 +60,75 @@ const DashboardHeader = ({
     },
     [fromDate, toDate]
   );
+  const [isOpen, setIsOpen] = useState(false);
   const headerTag = document.getElementById("header");
+
   return headerTag
     ? createPortal(
         <>
           {pathname === "/" ? (
             <>
-              <Button
-                className="flex items-center"
-                onClick={() => {
-                  panelFormRef?.current?.setPanelForm(generateEmptyPanel());
-                  panelFormRef?.current?.setIsOpen(true);
+              {/* <Select
+                dir="rtl"
+                onValueChange={(v) => {
+                  setSelectedDashboardId(v as string);
+                  setPanels?.((prev) =>
+                    prev.map((panel) => ({
+                      ...panel,
+                      queries: panel.queries.map(replaceQueryDates),
+                    }))
+                  );
                 }}
-                variant="outline"
+                value={
+                  allDashboards.find((db) => db.id === selectedDashboardId)
+                    ?.name
+                }
               >
-                <PlusIcon className="size-4" />
-                <span>افزودن پنل</span>
-              </Button>
-              <Button
-                className="flex items-center"
-                onClick={() => {}}
-                variant="outline"
-              >
-                <SaveIcon className="size-4" />
-                <span>ذخیره داشبورد</span>
-              </Button>
+                <SelectTrigger className="w-36 h-10">
+                  {allDashboards?.find((db) => db.id === selectedDashboardId)
+                    ?.name ?? "انتخاب کنید ..."}
+                </SelectTrigger>
+                <SelectContent>
+                  {allDashboards?.map((db) => (
+                    <SelectItem key={db.id} value={db.id}>
+                      {db.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select> */}
+              {/* <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogTrigger asChild>
+                  <Button className="flex items-center" variant="outline">
+                    <PlusIcon className="size-4" />
+                    <span>افزودن داشبورد</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent
+                  className="max-h-[70vh] overflow-y-auto"
+                  dir="rtl"
+                >
+                  <DialogTitle className="w-full text-center">
+                    افزودن داشبورد
+                  </DialogTitle>
+                  <DashboardForm
+                    onSubmit={(db) => {
+                      setIsOpen(false);
+                      // createDashboard(db);
+                      setSelectedDashboardId(db.id);
+                    }}
+                  />
+                </DialogContent>
+              </Dialog> */}
+              {/* {selectedDashboardId && (
+                <Button
+                  className="flex items-center"
+                  onClick={() => {}}
+                  variant="outline"
+                >
+                  <SaveIcon className="size-4" />
+                  <span>ذخیره داشبورد</span>
+                </Button>
+              )} */}
             </>
           ) : null}
           <div className="flex-1" />

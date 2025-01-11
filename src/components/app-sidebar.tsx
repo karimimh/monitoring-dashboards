@@ -36,14 +36,21 @@ const AppSidebar = ({ isOpen }: AppSidebarProps) => {
     >
       {items.map(({ icon: Icon, href, title }) => (
         <Link
-          className="flex items-center gap-2 h-10 cursor-pointer hover:text-blue-600"
+          className="flex items-center gap-2 p-4 border-b cursor-pointer text-lg hover:text-blue-600"
           href={href}
           key={title}
         >
-          <Icon className="size-4" />
+          <Icon className="size-5" />
           {title}
         </Link>
       ))}
+      <div className="flex-1" />
+      <div className="text-blue-600 text-sm">
+        تهیه شده توسط{" "}
+        <a href="tel:+989033336987" className="font-bold">
+          Amir Mohammad Karimi
+        </a>{" "}
+      </div>
     </aside>
   );
 };

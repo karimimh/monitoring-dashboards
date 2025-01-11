@@ -1,22 +1,9 @@
 import { Panel } from "@/types/panel";
 import axios from "axios";
+import * as crypto from "crypto";
 
-export const getDashboard = async (id: string): Promise<string> => {
-  const URL = `http://ir.snnf.me:8086/api/v2/dashboard?id=${id}`;
-
-  const response = await axios.get(URL, {
-    headers: {
-      Accept: "application/json",
-      Authorization: "Token testtest",
-      "Content-Type": "application/json",
-    },
-  });
-
-  return response.data;
-};
-
-export const getAllDashboards = async (): Promise<string> => {
-  const URL = `http://ir.snnf.me:8086/api/v2/dashboards`;
+export const getDashboard = async (id: string) => {
+  const URL = `http://ir.snnf.me:8086/api/v2/inputs?id=${id}`;
 
   const response = await axios.get(URL, {
     headers: {
@@ -26,14 +13,25 @@ export const getAllDashboards = async (): Promise<string> => {
     },
   });
 
-  return response.data;
+  return response.data.dashboards[0];
 };
 
-export const createDashboard = async (
-  name: string,
-  panels: Panel[]
-): Promise<string> => {
-  const URL = `http://ir.snnf.me:8086/api/v2/dashboard`;
+export const getAllDashboards = async () => {
+  const URL = `http://ir.snnf.me:8086/api/v2/input`;
+
+  const response = await axios.get(URL, {
+    headers: {
+      Accept: "application/json",
+      Authorization: "Token testtest",
+      "Content-Type": "application/json",
+    },
+  });
+
+  return response.data.dashboards;
+};
+
+export const createDashboard = async (name: string, panels: Panel[]) => {
+  const URL = `http://ir.snnf.me:8086/api/v2/inputs`;
 
   const payload = {
     name,
@@ -43,6 +41,8 @@ export const createDashboard = async (
       index,
     })),
     variables: [],
+    id: crypto.randomBytes(8).toString("hex"),
+    orgId: "02cdc6c4b5df4fb7",
   };
 
   const response = await axios.post(URL, payload, {
