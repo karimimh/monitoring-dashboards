@@ -100,7 +100,11 @@ export const createNotificationCheck = async (
 
 export const getAllNotifications = async () => {
   const URL = `${NOTIFICATION_CHECKS_URL}?orgID=YOUR_ORG_ID`;
-  const response = await httpClient.get(URL);
+  const response = await httpClient.get(URL, {
+    headers: {
+      Authorization: "Token testtest",
+    },
+  });
 
   return response.data.checks;
 };

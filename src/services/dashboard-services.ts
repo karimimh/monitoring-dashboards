@@ -24,7 +24,7 @@ export const createDashboard = async (name: string, panels: Panel[]) => {
     name,
     panels: panels.map((panel, index) => ({
       title: panel.title,
-      queries: panel.queries[0],
+      query: panel.query[0],
       index,
     })),
     variables: [],
@@ -47,4 +47,4 @@ export const saveDashboard = async (dashboard: Dashboard) => {
 
   const response = await httpClient.put(URL, dashboard);
   return response.data;
-}
+};

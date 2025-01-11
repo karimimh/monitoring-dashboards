@@ -1,10 +1,5 @@
 "use client";
 
-import DropdownButton from "@/components/ui/dropdown-button";
-// list server (name and ip), delete, edit
-// add server ( name, ip , port , config <text box >, dropdown for type < snmp, pull, push, wmi > )
-
-import { Trash } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 
 interface ServersListProps {
@@ -26,23 +21,14 @@ const ServersList = ({ data, isLoading }: ServersListProps) => {
           >
             <div className="flex flex-col gap-2">
               <div className="font-bold">{server.name}</div>
-              <div className="">
-                {server.status === "active" ? "فعال" : server.status}
-              </div>
-              <div className="text-gray-400 text-sm">
-                {server.latestCompleted}
+              <div className="text-gray-500 text-sm">
+                {server.type === "influxdb_v2_listener"
+                  ? "PUSH"
+                  : server.type === "prometheus"
+                  ? "PULL"
+                  : "SNMP"}
               </div>
             </div>
-            <DropdownButton
-              items={[
-                {
-                  icon: Trash,
-                  onClick: async () => {},
-                  title: "حذف",
-                  className: "text-red-600",
-                },
-              ]}
-            />
           </div>
         ))
       )}

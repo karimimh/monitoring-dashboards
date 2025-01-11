@@ -21,7 +21,7 @@ const PanelCards = ({
 }: PanelCardsProps) => {
   const queryResults = useDatabaseQueries(
     "influx",
-    panels.map((panel) => panel.queries),
+    panels.map((panel) => panel.query),
     variables
   );
   return (
