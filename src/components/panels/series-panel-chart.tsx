@@ -111,7 +111,7 @@ const SeriesPanelChart = ({
                 style={{ color: colors[index], borderColor: colors[index] }}
               >
                 <td className="border-r truncate">
-                  {extractQueryName(panel.queries[index])}
+                  {extractQueryName(panel.query[index])}
                 </td>
                 <td>{transformedData.min.toFixed(2)}</td>
                 <td>{transformedData.max.toFixed(2)}</td>

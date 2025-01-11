@@ -4,7 +4,12 @@ import { Notification } from "@/types/notification";
 import { useState } from "react";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "../../ui/select";
 
 interface NotificationCheckFormProps {
   onSubmit: (notif: Notification) => void;
@@ -139,7 +144,7 @@ const NotificationCheckForm = ({ onSubmit }: NotificationCheckFormProps) => {
           <Select
             dir="rtl"
             value={statusType}
-            onValueChange={(v) => setStatusType(v)}
+            onValueChange={(v) => setStatusType(v as typeof statusType)}
           >
             <SelectTrigger className="w-32 h-10">
               {statusTypeItems.find((item) => item.value === statusType)

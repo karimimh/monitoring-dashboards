@@ -17,7 +17,7 @@ import { Skeleton } from "../ui/skeleton";
 
 interface ChooseDashboardProps {
   onDashboardSelect: (db: Dashboard) => void;
-  allDashboards: any;
+  allDashboards: Dashboard[];
   onDashboardDelete: () => void;
   isLoading: boolean;
 }

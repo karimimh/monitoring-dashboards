@@ -4,7 +4,12 @@ import { NotificationRule } from "@/types/notification";
 import { useState } from "react";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "../../ui/select";
 import { useAllNotificationEndpoints } from "@/hooks/use-notification";
 
 interface NotificationRuleFormProps {
@@ -194,15 +199,18 @@ const NotificationRuleForm = ({ onSubmit }: NotificationRuleFormProps) => {
           onValueChange={(v) => setSelectedEndpoint(v)}
         >
           <SelectTrigger className="w-48 h-10">
-            {notificationEndpoints?.find((item) => item.id === selectedEndpoint)
-              ?.name ?? "انتخاب کنید ..."}
+            {notificationEndpoints?.find(
+              (item: { id: string }) => item.id === selectedEndpoint
+            )?.name ?? "انتخاب کنید ..."}
           </SelectTrigger>
           <SelectContent>
-            {notificationEndpoints?.map(({ id, name }) => (
-              <SelectItem key={id} value={id}>
-                {name}
-              </SelectItem>
-            ))}
+            {notificationEndpoints?.map(
+              ({ id, name }: { id: string; name: string }) => (
+                <SelectItem key={id} value={id}>
+                  {name}
+                </SelectItem>
+              )
+            )}
           </SelectContent>
         </Select>
         <Button

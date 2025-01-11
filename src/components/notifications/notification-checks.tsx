@@ -5,7 +5,12 @@ import { Trash } from "lucide-react";
 import DropdownButton from "../ui/dropdown-button";
 
 interface NotificationChecksProps {
-  data: any;
+  data: {
+    id: string;
+    name: string;
+    status: string;
+    latestCompleted: string;
+  }[];
 }
 
 const NotificationChecks = ({ data }: NotificationChecksProps) => {

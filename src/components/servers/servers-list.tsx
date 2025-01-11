@@ -3,7 +3,11 @@
 import { Skeleton } from "../ui/skeleton";
 
 interface ServersListProps {
-  data: any;
+  data: {
+    id: string;
+    name: string;
+    type: string;
+  }[];
   isLoading: boolean;
 }
 
