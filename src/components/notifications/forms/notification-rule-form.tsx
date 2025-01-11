@@ -2,9 +2,9 @@
 
 import { NotificationRule } from "@/types/notification";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "../../ui/select";
 import { useAllNotificationEndpoints } from "@/hooks/use-notification";
 
 interface NotificationRuleFormProps {

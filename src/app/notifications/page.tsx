@@ -1,10 +1,9 @@
 "use client";
 
 import NotificationChecks from "@/components/notifications/notification-checks";
-import NotificationEndpointForm from "@/components/notifications/notification-endpoint-form";
 import NotificationEndpoints from "@/components/notifications/notification-endpoints";
-import NotificationForm from "@/components/notifications/notification-form";
-import NotificationRuleForm from "@/components/notifications/notification-rule-form";
+import NotificationCheckForm from "@/components/notifications/forms/notification-check-form";
+import NotificationRuleForm from "@/components/notifications/forms/notification-rule-form";
 import NotificationRulesList from "@/components/notifications/notification-rules";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -19,6 +18,7 @@ import {
 } from "@/hooks/use-notification";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
+import NotificationEndpointForm from "@/components/notifications/forms/notification-endpoint-form";
 
 // name, send_via => telegram / bale, chat_id
 // /api/v1/addnotification ( channelName: telegram_name / bale_name, chatID)
@@ -148,7 +148,7 @@ const NotificationsPage = () => {
             />
           )}
           {dialogSource === "notification" && (
-            <NotificationForm
+            <NotificationCheckForm
               onSubmit={async (notif) => {
                 createNotification(notif);
                 await refetchAllNotificationChecks();

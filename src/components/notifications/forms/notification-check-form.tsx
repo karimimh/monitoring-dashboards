@@ -2,15 +2,15 @@
 
 import { Notification } from "@/types/notification";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "../../ui/select";
 
-interface NotificationFormProps {
+interface NotificationCheckFormProps {
   onSubmit: (notif: Notification) => void;
 }
 
-const NotificationForm = ({ onSubmit }: NotificationFormProps) => {
+const NotificationCheckForm = ({ onSubmit }: NotificationCheckFormProps) => {
   const [notifName, setNotifName] = useState<string>("");
   const [scheduleEvery, setScheduleEvery] = useState<
     | "5s"
@@ -176,4 +176,4 @@ const NotificationForm = ({ onSubmit }: NotificationFormProps) => {
   );
 };
 
-export default NotificationForm;
+export default NotificationCheckForm;
