@@ -96,7 +96,7 @@ const DashboardHeader = ({
           setPanels?.((prev) =>
             prev.map((panel) => ({
               ...panel,
-              queries: panel.queries.map(replaceQueryDates),
+              query: panel.query.map(replaceQueryDates),
             }))
           );
         }}

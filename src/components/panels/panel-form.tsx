@@ -39,7 +39,7 @@ const PanelForm = forwardRef<PanelFormHandle, PanelFormProps>(
                 onChange={(e) => setValue({ ...value, title: e.target.value })}
               />
             </div>
-            {value.queries.map((query, index) => (
+            {value.query.map((query, index) => (
               <div className="w-full flex items-center gap-2" key={index}>
                 <div className="w-32">کوئری {index + 1}</div>
                 <AutogrowingTextarea
@@ -48,13 +48,13 @@ const PanelForm = forwardRef<PanelFormHandle, PanelFormProps>(
                   minRows={4}
                   maxRows={5}
                   onChange={(newQuery) => {
-                    const prev = value.queries;
+                    const prev = value.query;
                     const newQueries = [
                       ...prev.slice(0, index),
                       newQuery,
                       ...prev.slice(index + 1),
                     ];
-                    setValue({ ...value, queries: newQueries });
+                    setValue({ ...value, query: newQueries });
                   }}
                 />
               </div>
@@ -62,9 +62,9 @@ const PanelForm = forwardRef<PanelFormHandle, PanelFormProps>(
             <div className="w-full py-2">
               <Button
                 onClick={() => {
-                  const prev = value.queries;
+                  const prev = value.query;
                   const newQueries = [...prev, ""];
-                  setValue({ ...value, queries: newQueries });
+                  setValue({ ...value, query: newQueries });
                 }}
                 variant="secondary"
               >

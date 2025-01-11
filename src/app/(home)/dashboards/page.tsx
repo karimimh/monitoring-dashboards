@@ -8,7 +8,7 @@ import { useState } from "react";
 
 export default function Home() {
   const [selectedDashboard, setSelectedDashboard] = useState<DashboardObject>();
-  const { data: allDashboards, refetch } = useAllDashboards();
+  const { data: allDashboards, refetch, isLoading } = useAllDashboards();
 
   return selectedDashboard ? (
     <Dashboard selectedDashboard={selectedDashboard} />
@@ -17,6 +17,7 @@ export default function Home() {
       allDashboards={allDashboards}
       onDashboardSelect={setSelectedDashboard}
       onDashboardDelete={() => refetch()}
+      isLoading={isLoading}
     />
   );
 }

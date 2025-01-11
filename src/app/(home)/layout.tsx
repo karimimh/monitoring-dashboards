@@ -15,12 +15,18 @@ export default function HomeLayout({
 }>) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
+  const [username, setUsername] = useState("");
   useEffect(() => {
     const token = localStorage.getItem("token");
     httpClient.defaults.headers.common["Authorization"] = token;
     if (!token) router.push("/login");
   }, [router]);
 
+  useEffect(() => {
+    if (window !== undefined) {
+      setUsername(localStorage.getItem("username") ?? "");
+    }
+  }, []);
   return (
     <>
       <header
@@ -36,7 +42,7 @@ export default function HomeLayout({
         {/* Profile Card */}
         <div className="flex items-center gap-2 shadow border rounded-md px-3 py-1 w-60">
           <CircleUserIcon className="size-4" />
-          <div className="flex-1">{localStorage?.getItem("username")}</div>
+          <div className="flex-1">{username}</div>
           <DropdownButton
             items={[
               {

@@ -12,7 +12,7 @@ type UseDatabaseQueriesResult = {
 
 export const useDatabaseQueries = (
   db: string,
-  queries: string[][],
+  query: string[][],
   variables: Variable[]
 ): UseDatabaseQueriesResult => {
   const replaceQueryVariables = (
@@ -26,7 +26,7 @@ export const useDatabaseQueries = (
   };
 
   const results = useQueries({
-    queries: queries.map((queryList) => ({
+    queries: query.map((queryList) => ({
       queryKey: ["databaseQuery", db, queryList],
       queryFn: async () => {
         const results = await Promise.allSettled(

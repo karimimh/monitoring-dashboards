@@ -1,6 +1,6 @@
 export type Panel = {
   title: string;
-  queries: string[];
+  query: string[];
   colors: string[];
   id: string;
 };

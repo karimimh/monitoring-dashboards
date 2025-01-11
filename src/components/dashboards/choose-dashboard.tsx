@@ -19,12 +19,14 @@ interface ChooseDashboardProps {
   onDashboardSelect: (db: Dashboard) => void;
   allDashboards: any;
   onDashboardDelete: () => void;
+  isLoading: boolean;
 }
 
 const ChooseDashboard = ({
   allDashboards,
   onDashboardSelect,
   onDashboardDelete,
+  isLoading,
 }: ChooseDashboardProps) => {
   const { mutate: createDashboard } = useCreateDashboard();
   const [isOpen, setIsOpen] = useState(false);
@@ -33,9 +35,9 @@ const ChooseDashboard = ({
       className="w-full h-full flex items-center flex-wrap gap-4 p-4"
       dir="rtl"
     >
-      {allDashboards ? (
+      {!isLoading ? (
         <>
-          {allDashboards.map((db) => (
+          {allDashboards?.map((db) => (
             <div
               key={db.id}
               className="relative flex w-80 h-64 bg-white rounded-md items-center gap-2 justify-center p-4 border cursor-pointer text-lg hover:text-blue-600"
