@@ -1,15 +1,17 @@
 "use client";
 
+import Dashboard from "@/components/dashboard";
 import DashboardHeader from "@/components/dashboard-header";
-import PanelCards from "@/components/panels/panel-cards";
-import PanelForm, { PanelFormHandle } from "@/components/panels/panel-form";
-import Variables, { VariablesHandle } from "@/components/variables";
+import { PanelFormHandle } from "@/components/panels/panel-form";
+import { VariablesHandle } from "@/components/variables";
+import { useDashboard } from "@/hooks/use-dashboard";
 import { Variable } from "@/schemas/variable";
 import { Panel } from "@/types/panel";
-import { generateEmptyPanel, generateId } from "@/utils/random";
-import { useRef, useState } from "react";
+import { generateId } from "@/utils/random";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
+  const [selectedDashboardId, setSelectedDashboardId] = useState<string>("");
   const panelFormRef = useRef<PanelFormHandle>(null);
   const variablesRef = useRef<VariablesHandle>(null);
   const [fromDate, setFromDate] = useState<number | undefined>(1736102864429);
@@ -39,50 +41,19 @@ export default function Home() {
         toDate={toDate}
         setToDate={setToDate}
         variablesRef={variablesRef}
+        selectedDashboardId={selectedDashboardId}
+        setSelectedDashboardId={(id) => {
+          setSelectedDashboardId(id);
+        }}
       />
-      <PanelCards
-        panels={panels}
+      <Dashboard
+        setPanels={setPanels}
+        panelFormRef={panelFormRef}
+        variablesRef={variablesRef}
         variables={variables}
-        onEditPanelClick={(p) => {
-          panelFormRef.current?.setPanelForm(p);
-          panelFormRef.current?.setIsOpen(true);
-        }}
-        onDeleteButtonClick={(p) => {
-          const index = panels.findIndex((item) => item.id === p.id);
-          if (index >= 0) {
-            setPanels((prev) => [
-              ...prev.slice(0, index),
-              ...prev.slice(index + 1),
-            ]);
-          }
-        }}
-      />
-      <Variables
-        ref={variablesRef}
-        value={variables}
-        onSubmit={(newVariables) => {
-          variablesRef.current?.setIsOpen(false);
-          setVariables(newVariables);
-        }}
-      />
-      <PanelForm
-        ref={panelFormRef}
-        onSubmit={(panelForm: Panel) => {
-          const existingPanelIndex = panels.findIndex(
-            (item) => item.id === panelForm.id
-          );
-          if (existingPanelIndex >= 0) {
-            setPanels((prev) => [
-              ...prev.slice(0, existingPanelIndex),
-              panelForm,
-              ...prev.slice(existingPanelIndex + 1),
-            ]);
-          } else {
-            setPanels((prev) => [...prev, panelForm]);
-          }
-          panelFormRef.current?.setIsOpen(false);
-          panelFormRef.current?.setPanelForm(generateEmptyPanel());
-        }}
+        panels={panels}
+        setVariables={setVariables}
+        selectedDashboardId={selectedDashboardId}
       />
     </>
   );

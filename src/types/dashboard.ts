@@ -1,13 +1,11 @@
 import { Panel } from "./panel";
 
 export type Dashboard = {
-  id: number;
+  id: string;
   name: string;
   panels: Panel[];
-  variables: [
-    {
-      name: string;
-      query: string;
-    }
-  ];
+  variables: {
+    name: string;
+    query: string;
+  }[];
 };

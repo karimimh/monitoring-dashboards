@@ -6,10 +6,11 @@ import {
 import { Dashboard } from "@/types/dashboard";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export const useDashboard = (id: string) => {
+export const useDashboard = (id?: string) => {
   return useQuery({
     queryKey: ["dashboard", id],
-    queryFn: () => getDashboard(id),
+    queryFn: () => getDashboard(id ?? ""),
+    enabled: !!id,
   });
 };
 

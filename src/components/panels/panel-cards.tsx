@@ -25,7 +25,7 @@ const PanelCards = ({
     variables
   );
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 place-items-start gap-4 pt-6 pb-10 px-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 place-items-start gap-4 pt-16 pb-10 px-6">
       {queryResults &&
         queryResults.map((panelQueryResults, index) =>
           panelQueryResults.data ? (
