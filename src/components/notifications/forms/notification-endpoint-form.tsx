@@ -2,9 +2,14 @@
 
 import { NotificationEndpoint } from "@/types/notification";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 interface NotificationEndpointFormProps {
   onSubmit: (notifRule: NotificationEndpoint) => void;
