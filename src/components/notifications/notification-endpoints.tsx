@@ -1,18 +1,17 @@
 "use client";
 
-import { useAllNotificationEndpoints } from "@/hooks/use-notification";
 import axios from "axios";
 import { Trash } from "lucide-react";
 import DropdownButton from "../ui/dropdown-button";
 
-interface NotificationEndpointsProps {}
+interface NotificationEndpointsProps {
+  data: any;
+}
 
-const NotificationEndpoints = ({}: NotificationEndpointsProps) => {
-  const { data } = useAllNotificationEndpoints();
-
+const NotificationEndpoints = ({ data }: NotificationEndpointsProps) => {
   return (
     <div className="w-full mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-      {data?.notificationEndpoints.map((endpoint) => (
+      {data?.map((endpoint) => (
         <div
           key={endpoint.id}
           className="flex w-full items-center justify-between p-4 bg-white rounded-md shadow-md border"

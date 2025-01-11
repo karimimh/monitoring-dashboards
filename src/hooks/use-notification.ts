@@ -1,18 +1,36 @@
 import {
-  createNotification,
+  createNotificationCheck,
   createNotificationEndpoint,
+  createNotificationRule,
   getAllNotificationEndpoints,
-} from "@/services/services";
-import { Notification, NotificationEndpoint } from "@/types/notification";
+  getAllNotificationRules,
+  getAllNotifications,
+} from "@/services/notification-services";
+import {
+  Notification,
+  NotificationEndpoint,
+  NotificationRule,
+} from "@/types/notification";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useAllNotificationEndpoints = () => {
   return useQuery({
     queryKey: ["notificationEndpoints"],
-    queryFn: async () => {
-      const result = await getAllNotificationEndpoints();
-      return result;
-    },
+    queryFn: getAllNotificationEndpoints,
+  });
+};
+
+export const useAllNotifications = () => {
+  return useQuery({
+    queryKey: ["notifications"],
+    queryFn: getAllNotifications,
+  });
+};
+
+export const useAllNotificaionRules = () => {
+  return useQuery({
+    queryKey: ["notificationRules"],
+    queryFn: getAllNotificationRules,
   });
 };
 
@@ -27,7 +45,7 @@ export const useCreateNotificationEndpoint = () => {
 export const useCreateNotification = () => {
   return useMutation({
     mutationFn: async (data: Notification) => {
-      await createNotification(
+      await createNotificationCheck(
         data.name,
         data.query,
         data.schedule_every,
@@ -39,3 +57,10 @@ export const useCreateNotification = () => {
   });
 };
 
+export const useCreateNotificationRule = () => {
+  return useMutation({
+    mutationFn: async (data: NotificationRule) => {
+      await createNotificationRule(data.name, data.conditions, data.endpointId);
+    },
+  });
+};

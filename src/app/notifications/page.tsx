@@ -1,15 +1,21 @@
 "use client";
 
+import NotificationChecks from "@/components/notifications/notification-checks";
 import NotificationEndpointForm from "@/components/notifications/notification-endpoint-form";
 import NotificationEndpoints from "@/components/notifications/notification-endpoints";
 import NotificationForm from "@/components/notifications/notification-form";
 import NotificationRuleForm from "@/components/notifications/notification-rule-form";
+import NotificationRulesList from "@/components/notifications/notification-rules";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  useAllNotificaionRules,
+  useAllNotificationEndpoints,
+  useAllNotifications,
   useCreateNotification,
   useCreateNotificationEndpoint,
+  useCreateNotificationRule,
 } from "@/hooks/use-notification";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
@@ -17,9 +23,6 @@ import { useState } from "react";
 // name, send_via => telegram / bale, chat_id
 // /api/v1/addnotification ( channelName: telegram_name / bale_name, chatID)
 // /api/v1/NotificationEndpoint ()
-
-
-
 
 // name, query, schedule_every, thresholds(CRIT, WARN, OK)
 const NotificationsPage = () => {
@@ -29,12 +32,19 @@ const NotificationsPage = () => {
     "rule" | "endpoint" | "notification"
   >("rule");
   const [selectedTab, setSelectedTab] = useState<TabValue>("alert");
+  const { mutate: createNotificationEndpoint } =
+    useCreateNotificationEndpoint();
+  const { mutate: createNotification } = useCreateNotification();
+  const { mutate: createNotificationRule } = useCreateNotificationRule();
+  const { data: allNotificationRules, refetch: refetchAllNotificationRules } =
+    useAllNotificaionRules();
   const {
-    mutate: createNotificationEndpoint,
-    isPending: isNotifEndpointPending,
-  } = useCreateNotificationEndpoint();
-  const { mutate: createNotification, isPending: isNotifPending } =
-    useCreateNotification();
+    data: allNotificationEndPoints,
+    refetch: refetchAllNotificationEndpoints,
+  } = useAllNotificationEndpoints();
+  const { data: allNotificationChecks, refetch: refetchAllNotificationChecks } =
+    useAllNotifications();
+
   return (
     <>
       <div className="p-4">
@@ -43,14 +53,17 @@ const NotificationsPage = () => {
           value={selectedTab}
           onValueChange={(v) => setSelectedTab(v as TabValue)}
         >
-          <TabsList className="w-full text-black" dir="rtl">
-            <TabsTrigger className="w-36" value="alert">
+          <TabsList
+            className="w-full text-black flex items-center bg-slate-300"
+            dir="rtl"
+          >
+            <TabsTrigger className="flex-1" value="alert">
               اعلان‌
             </TabsTrigger>
-            <TabsTrigger className="w-36" value="endpoint">
+            <TabsTrigger className="flex-1" value="endpoint">
               مقاصد اعلان
             </TabsTrigger>
-            <TabsTrigger className="w-36" value="rules">
+            <TabsTrigger className="flex-1" value="rules">
               قوانین ارسال اعلان
             </TabsTrigger>
           </TabsList>
@@ -71,6 +84,7 @@ const NotificationsPage = () => {
               <PlusIcon className="size-4" />
               <span>افزودن اعلان</span>
             </Button>
+            <NotificationChecks data={allNotificationChecks} />
           </TabsContent>
           <TabsContent
             className="bg-white rounded-md w-full min-h-[calc(100vh-9rem)] p-4"
@@ -88,7 +102,7 @@ const NotificationsPage = () => {
               <PlusIcon className="size-4" />
               <span>افزودن مقصد</span>
             </Button>
-            <NotificationEndpoints />
+            <NotificationEndpoints data={allNotificationEndPoints} />
           </TabsContent>
           <TabsContent
             className="bg-white rounded-md w-full min-h-[calc(100vh-9rem)] p-4"
@@ -106,6 +120,7 @@ const NotificationsPage = () => {
               <PlusIcon className="size-4" />
               <span>افزودن قانون</span>
             </Button>
+            <NotificationRulesList data={allNotificationRules} />
           </TabsContent>
         </Tabs>
       </div>
@@ -115,20 +130,29 @@ const NotificationsPage = () => {
             {dialogSource === "rule" ? "افزودن قانون" : "افزودن مقصد"}
           </DialogTitle>
           {dialogSource === "rule" && (
-            <NotificationRuleForm onSubmit={(rule) => console.log(rule)} />
+            <NotificationRuleForm
+              onSubmit={async (rule) => {
+                createNotificationRule(rule);
+                setIsOpen(false);
+                await refetchAllNotificationRules();
+              }}
+            />
           )}
           {dialogSource === "endpoint" && (
             <NotificationEndpointForm
-              onSubmit={(ep) => {
+              onSubmit={async (ep) => {
                 createNotificationEndpoint(ep);
+                await refetchAllNotificationEndpoints();
+                setIsOpen(false);
               }}
             />
           )}
           {dialogSource === "notification" && (
             <NotificationForm
-              onSubmit={(notif) => {
+              onSubmit={async (notif) => {
                 createNotification(notif);
-
+                await refetchAllNotificationChecks();
+                setIsOpen(false);
               }}
             />
           )}
