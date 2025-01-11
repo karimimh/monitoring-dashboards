@@ -1,30 +1,29 @@
 import {
+  NOTIFICATION_CHECKS_URL,
+  NOTIFICATION_ENDPOINTS_URL,
+  NOTIFICATION_ENDPOINTS_URL_2,
+  NOTIFICATION_RULES_URL,
+} from "@/constants/urls";
+import {
   NotificationEndpointApi,
   notificationEndpointSchema,
 } from "@/schemas/notification";
-import axios from "axios";
-import qs from "qs";
 import * as crypto from "crypto";
+import qs from "qs";
+import { httpClient } from "./http-client";
 
 export const getAllNotificationEndpoints = async () => {
-  const URL = `http://ir.snnf.me:8086/api/v2/notificationEndpoints?orgID=02cdc6c4b5df4fb7`;
-  const response = await axios.get(URL, {
-    headers: {
-      Accept: "application/json",
-      Authorization: "Token testtest",
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  });
+  const URL = `${NOTIFICATION_ENDPOINTS_URL}?orgID=02cdc6c4b5df4fb7`;
+  const response = await httpClient.get(URL);
 
   return response.data.notificationEndpoints;
 };
 
 export const createNotificationEndpoint = async (
   name: string,
-  sendVia: "telegram" | "bale",
-  chatId: string
+  sendVia: "telegram" | "bale"
 ): Promise<NotificationEndpointApi> => {
-  const URL = `http://gr.snnf.me:8081/api/v2/notificationEndpoints`;
+  const URL = NOTIFICATION_ENDPOINTS_URL;
   const payload = {
     authMethod: "none",
     method: "POST",
@@ -35,13 +34,13 @@ export const createNotificationEndpoint = async (
     name: `${sendVia}_${name}`,
   };
 
-  const URL2 = `http://gr.snnf.me:8081/api/v1/addnotification`;
+  const URL2 = NOTIFICATION_ENDPOINTS_URL_2;
   const payload2 = {
     channelName: `${sendVia}_${name}`,
     chatID: "asasas",
   };
 
-  const x = await axios.post(URL2, qs.stringify(payload2), {
+  await httpClient.post(URL2, qs.stringify(payload2), {
     headers: {
       Accept: "application/json",
       Authorization:
@@ -49,7 +48,7 @@ export const createNotificationEndpoint = async (
       "Content-Type": "application/x-www-form-urlencoded",
     },
   });
-  const response = await axios.post(URL, payload, {
+  const response = await httpClient.post(URL, payload, {
     headers: {
       Accept: "application/json",
       Authorization: "Token testtest",
@@ -68,7 +67,7 @@ export const createNotificationCheck = async (
   thresholdValue: string,
   statusType: "CRIT" | "WARN" | "ANY" | "INFO"
 ) => {
-  const URL = `http://ir.snnf.me:8086/api/v2/checks`;
+  const URL = NOTIFICATION_CHECKS_URL;
   const payload = {
     type: "threshold",
     activeStatus: "active",
@@ -88,7 +87,7 @@ export const createNotificationCheck = async (
     ],
   };
 
-  const response = await axios.post(URL, payload, {
+  const response = await httpClient.post(URL, payload, {
     headers: {
       Accept: "application/json",
       Authorization: "Token testtest",
@@ -100,14 +99,8 @@ export const createNotificationCheck = async (
 };
 
 export const getAllNotifications = async () => {
-  const URL = `http://ir.snnf.me:8086/api/v2/checks?orgID=02cdc6c4b5df4fb7`;
-  const response = await axios.get(URL, {
-    headers: {
-      Accept: "application/json",
-      Authorization: "Token testtest",
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  });
+  const URL = `${NOTIFICATION_CHECKS_URL}?orgID=02cdc6c4b5df4fb7`;
+  const response = await httpClient.get(URL);
 
   return response.data.checks;
 };
@@ -126,7 +119,7 @@ export const createNotificationRule = async (
       },
   endpointID: string
 ) => {
-  const URL = `http://ir.snnf.me:8086/api/v2/notificationRules`;
+  const URL = NOTIFICATION_RULES_URL;
   const statusCondition =
     conditions.type === "is_equal_to"
       ? {
@@ -154,7 +147,7 @@ export const createNotificationRule = async (
     type: "http",
   };
 
-  const response = await axios.post(URL, payload, {
+  const response = await httpClient.post(URL, payload, {
     headers: {
       Accept: "application/json",
       Authorization: "Token testtest",
@@ -166,14 +159,8 @@ export const createNotificationRule = async (
 };
 
 export const getAllNotificationRules = async () => {
-  const URL = `http://ir.snnf.me:8086/api/v2/notificationRules?orgID=02cdc6c4b5df4fb7`;
-  const response = await axios.get(URL, {
-    headers: {
-      Accept: "application/json",
-      Authorization: "Token testtest",
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  });
+  const URL = `${NOTIFICATION_RULES_URL}?orgID=02cdc6c4b5df4fb7`;
+  const response = await httpClient.get(URL);
 
   return response.data.notificationRules;
 };

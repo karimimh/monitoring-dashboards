@@ -1,4 +1,4 @@
-import { BASE_URL, LOGIN_URL, REGISTER_URL } from "@/constants/urls";
+import { LOGIN_URL, REGISTER_URL } from "@/constants/urls";
 import axios from "axios";
 
 export const register = async (
@@ -7,7 +7,7 @@ export const register = async (
   password: string
 ) => {
   const response = await axios.post(
-    `${BASE_URL}${REGISTER_URL}`,
+    REGISTER_URL,
     {
       username,
       email,
@@ -29,7 +29,7 @@ export const login = async (
   email: string
 ) => {
   const response = await axios.post(
-    `${BASE_URL}${LOGIN_URL}`,
+    LOGIN_URL,
     {
       username,
       email,

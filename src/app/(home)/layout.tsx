@@ -3,7 +3,7 @@
 import AppSidebar from "@/components/app-sidebar";
 import DropdownButton from "@/components/ui/dropdown-button";
 import { cn } from "@/lib/utils";
-import axios from "axios";
+import { httpClient } from "@/services/http-client";
 import { CircleUserIcon, LogOut, MenuIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,9 +17,7 @@ export default function HomeLayout({
   const router = useRouter();
   useEffect(() => {
     const token = localStorage.getItem("token");
-    axios.defaults.headers.common["Authorization"] = `Token ${token}`;
-    axios.defaults.headers.common["Content-Type"] = "application/json";
-    axios.defaults.headers.common["Accept"] = "application/json";
+    httpClient.defaults.headers.common["Authorization"] = token;
     if (!token) router.push("/login");
   }, [router]);
 
@@ -38,7 +36,7 @@ export default function HomeLayout({
         {/* Profile Card */}
         <div className="flex items-center gap-2 shadow border rounded-md px-3 py-1 w-60">
           <CircleUserIcon className="size-4" />
-          <div className="flex-1">{localStorage.getItem("username")}</div>
+          <div className="flex-1">{localStorage?.getItem("username")}</div>
           <DropdownButton
             items={[
               {

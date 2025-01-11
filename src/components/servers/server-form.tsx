@@ -2,10 +2,10 @@
 
 import { Server } from "@/types/server";
 import { useState } from "react";
+import AutogrowingTextarea from "../ui/autogrowing-textarea";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
-import AutogrowingTextarea from "../ui/autogrowing-textarea";
 
 interface ServerFormProps {
   onSubmit: (notif: Server) => void;
@@ -15,9 +15,9 @@ const ServerForm = ({ onSubmit }: ServerFormProps) => {
   const [serverName, setServerName] = useState<string>("");
   const [ip, setIp] = useState<string>("");
   const [config, setConfig] = useState<string>("");
-  const [serverType, setServerType] = useState<
-    "SNMP" | "PULL" | "PUSH" | "WMI"
-  >("SNMP");
+  const [serverType, setServerType] = useState<"SNMP" | "PULL" | "PUSH">(
+    "SNMP"
+  );
   const [port, setPort] = useState<string>("");
 
   const serverTypeItems = [
@@ -32,10 +32,6 @@ const ServerForm = ({ onSubmit }: ServerFormProps) => {
     {
       title: "PUSH",
       value: "PUSH",
-    },
-    {
-      title: "WMI",
-      value: "WMI",
     },
   ];
 
@@ -67,9 +63,7 @@ const ServerForm = ({ onSubmit }: ServerFormProps) => {
         <div className="font-bold">نوع</div>
         <Select
           dir="rtl"
-          onValueChange={(v) =>
-            setServerType(v as "SNMP" | "PULL" | "PUSH" | "WMI")
-          }
+          onValueChange={(v) => setServerType(v as "SNMP" | "PULL" | "PUSH")}
           value={serverType}
         >
           <SelectTrigger className="w-48 h-10">
