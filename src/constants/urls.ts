@@ -1,5 +1,6 @@
 export const BASE_URL_1 = "http://localhost:8081";
-export const BASE_URL_2 = "http://localhost:8086/api/v2";
+export const BASE_URL_2 = "http://localhost:8081";
+// export const BASE_URL_2 = "http://localhost:8086/api/v2";
 
 export const REGISTER_URL = `${BASE_URL_1}/register`;
 export const LOGIN_URL = `${BASE_URL_1}/login`;

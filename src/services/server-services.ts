@@ -40,8 +40,13 @@ export const createServer = async (server: Server) => {
 
   const payload = serverTypePayloadMap[type];
 
-  const response = await httpClient.post(URL, payload);
-  return response.data;
+  try {
+    void httpClient.post(URL, payload);
+    return "";
+  } catch (err) {
+    console.log(err);
+    return "";
+  }
 };
 
 export const deleteServer = async (id: string) => {

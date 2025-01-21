@@ -30,14 +30,14 @@ const PanelCards = ({
         queryResults.map((panelQueryResults, index) =>
           panelQueryResults.data ? (
             <SeriesPanel
-              key={panels[index].id}
+              key={index}
               panel={panels[index]}
               panelData={panelQueryResults.data.filter((item) => item !== null)}
               onEditButtonClick={() => onEditPanelClick({ ...panels[index] })}
               onDeleteButtonClick={() => onDeleteButtonClick(panels[index])}
             />
           ) : (
-            <Skeleton key={panels[index].id} className="w-full h-96" />
+            <Skeleton key={index} className="w-full h-96" />
           )
         )}
     </div>

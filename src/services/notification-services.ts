@@ -1,4 +1,5 @@
 import {
+  BASE_URL_1,
   NOTIFICATION_CHECKS_URL,
   NOTIFICATION_ENDPOINTS_URL,
   NOTIFICATION_ENDPOINTS_URL_2,
@@ -28,7 +29,7 @@ export const createNotificationEndpoint = async (
     authMethod: "none",
     method: "POST",
     type: "http",
-    url: "http://localhost:8086/api/v2/notification",
+    url: `${BASE_URL_1}/api/v1/notification`,
     orgId: "YOUR_ORG_ID",
     status: "active",
     name: `${sendVia}_${name}`,
@@ -40,21 +41,8 @@ export const createNotificationEndpoint = async (
     chatID: "asasas",
   };
 
-  await httpClient.post(URL2, qs.stringify(payload2), {
-    headers: {
-      Accept: "application/json",
-      Authorization:
-        "REDACTED_TOKEN",
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  });
-  const response = await httpClient.post(URL, payload, {
-    headers: {
-      Accept: "application/json",
-      Authorization: "Token testtest",
-      "Content-Type": "application/json",
-    },
-  });
+  await httpClient.post(URL2, qs.stringify(payload2));
+  const response = await httpClient.post(URL, payload);
 
   return notificationEndpointSchema.parse(response.data);
 };
@@ -87,24 +75,14 @@ export const createNotificationCheck = async (
     ],
   };
 
-  const response = await httpClient.post(URL, payload, {
-    headers: {
-      Accept: "application/json",
-      Authorization: "Token testtest",
-      "Content-Type": "application/json",
-    },
-  });
+  const response = await httpClient.post(URL, payload);
 
   return response.data.notificationEndpoints;
 };
 
 export const getAllNotifications = async () => {
   const URL = `${NOTIFICATION_CHECKS_URL}?orgID=YOUR_ORG_ID`;
-  const response = await httpClient.get(URL, {
-    headers: {
-      Authorization: "Token testtest",
-    },
-  });
+  const response = await httpClient.get(URL);
 
   return response.data.checks;
 };
@@ -151,13 +129,7 @@ export const createNotificationRule = async (
     type: "http",
   };
 
-  const response = await httpClient.post(URL, payload, {
-    headers: {
-      Accept: "application/json",
-      Authorization: "Token testtest",
-      "Content-Type": "application/json",
-    },
-  });
+  const response = await httpClient.post(URL, payload);
 
   return response.data;
 };
