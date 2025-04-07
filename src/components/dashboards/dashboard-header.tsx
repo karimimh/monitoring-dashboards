@@ -4,11 +4,13 @@ import { useSaveDashboard } from "@/hooks/use-dashboard";
 import { Dashboard } from "@/types/dashboard";
 import { Panel } from "@/types/panel";
 import { generateEmptyPanel } from "@/utils/random";
-import { PlusIcon, SaveIcon } from "lucide-react";
+import { PlusIcon, SaveIcon, VariableIcon } from "lucide-react";
 import { useCallback } from "react";
 import DateRangePicker from "../date-range-picker";
 import { PanelFormHandle } from "../panels/panel-form";
+import { VariableFormHandle } from "../panels/variable-form";
 import { Button } from "../ui/button";
+import { Variable } from "@/schemas/variable";
 
 interface DashboardHeaderProps {
   fromDate: number | undefined;
@@ -19,6 +21,8 @@ interface DashboardHeaderProps {
   setToDate?: (toDate: number | undefined) => void;
   panelFormRef?: React.RefObject<PanelFormHandle | null>;
   dashboard: Dashboard;
+  variableFromRef?: React.RefObject<VariableFormHandle | null>;
+  variables: Variable[];
 }
 
 const DashboardHeader = ({
@@ -30,6 +34,8 @@ const DashboardHeader = ({
   setToDate,
   dashboard,
   panels,
+  variableFromRef,
+  variables,
 }: DashboardHeaderProps) => {
   // const { mutate: createDashboard } = useCreateDashboard();
   // const { data: allDashboards } = useAllDashboards();
@@ -57,7 +63,7 @@ const DashboardHeader = ({
 
   return (
     <div
-      className="flex items-center gap-4 h-14 px-4 border-b border-black"
+      className="flex items-center flex-wrap gap-4 min-h-14 py-4 px-4 border-b border-black"
       dir="rtl"
     >
       <Button
@@ -73,13 +79,28 @@ const DashboardHeader = ({
         <span>افزودن پنل</span>
       </Button>
       <Button
+        className="flex items-center gap-2"
+        onClick={() => {
+          variableFromRef?.current?.setVariableForm({
+            name: "",
+            query: "",
+          });
+          variableFromRef?.current?.setIsOpen(true);
+        }}
+        dir="rtl"
+        variant="outline"
+      >
+        <VariableIcon className="size-4" />
+        <span>متغیرها</span>
+      </Button>
+      <Button
         className="flex items-center"
         onClick={() =>
           saveDashboard({
             id: dashboard.id,
             name: dashboard.name,
             panels,
-            variables: [],
+            variables,
           })
         }
         variant="outline"

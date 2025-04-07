@@ -7,6 +7,7 @@ import { generateEmptyPanel } from "@/utils/random";
 import { useRef, useState } from "react";
 import PanelCards from "../panels/panel-cards";
 import PanelForm, { PanelFormHandle } from "../panels/panel-form";
+import VariableForm, { VariableFormHandle } from "../panels/variable-form";
 import Variables, { VariablesHandle } from "../variables";
 import DashboardHeader from "./dashboard-header";
 
@@ -16,6 +17,7 @@ interface DashboardProps {
 
 const Dashboard = ({ selectedDashboard }: DashboardProps) => {
   const panelFormRef = useRef<PanelFormHandle>(null);
+  const variableFormRef = useRef<VariableFormHandle>(null);
   const variablesRef = useRef<VariablesHandle>(null);
   const [fromDate, setFromDate] = useState<number | undefined>(1736102864429);
   const [toDate, setToDate] = useState<number | undefined>(1736189234429);
@@ -23,6 +25,7 @@ const Dashboard = ({ selectedDashboard }: DashboardProps) => {
     selectedDashboard.variables
   );
   const [panels, setPanels] = useState<Panel[]>(selectedDashboard.panels);
+
   return (
     <>
       <DashboardHeader
@@ -34,6 +37,8 @@ const Dashboard = ({ selectedDashboard }: DashboardProps) => {
         setToDate={setToDate}
         dashboard={selectedDashboard}
         panels={panels}
+        variableFromRef={variableFormRef}
+        variables={variables}
       />
       <PanelCards
         panels={panels}
@@ -77,6 +82,32 @@ const Dashboard = ({ selectedDashboard }: DashboardProps) => {
           }
           panelFormRef.current?.setIsOpen(false);
           panelFormRef.current?.setPanelForm(generateEmptyPanel());
+        }}
+      />
+      <VariableForm
+        ref={variableFormRef}
+        onSubmit={(newVariable) => {
+          const existingVariableIndex = variables.findIndex(
+            (item) => item.name === newVariable.name
+          );
+          if (existingVariableIndex >= 0) {
+            setVariables((prev) => [
+              ...prev.slice(0, existingVariableIndex),
+              newVariable,
+              ...prev.slice(existingVariableIndex + 1),
+            ]);
+          } else {
+            setVariables((prev) => [...prev, newVariable]);
+          }
+          variableFormRef.current?.setIsOpen(false);
+          variableFormRef.current?.setVariableForm({
+            name: "",
+            query: "",
+          });
+        }}
+        variables={variables}
+        onVariablesChange={(newVariables) => {
+          setVariables(newVariables);
         }}
       />
     </>

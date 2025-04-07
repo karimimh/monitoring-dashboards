@@ -3,7 +3,21 @@ import { executeVariableQuery } from "@/services/services";
 import { useQueries } from "@tanstack/react-query";
 
 type UseVariablesResult = {
-  data: (string | null)[] | undefined;
+  data:
+    | {
+        results?: {
+          series: {
+            name: string;
+            columns: {
+              key: string;
+              value: string;
+            }[];
+            values: (string | number | null)[][];
+          }[];
+          statement_id: number;
+        }[];
+      }
+    | undefined;
   isLoading: boolean;
   isError: boolean;
   error: unknown;

@@ -1,5 +1,5 @@
 import {
-  BASE_URL_1,
+  BASE_URL,
   NOTIFICATION_CHECKS_URL,
   NOTIFICATION_ENDPOINTS_URL,
   NOTIFICATION_ENDPOINTS_URL_2,
@@ -29,7 +29,7 @@ export const createNotificationEndpoint = async (
     authMethod: "none",
     method: "POST",
     type: "http",
-    url: `${BASE_URL_1}/api/v1/notification`,
+    url: `${BASE_URL}/api/v1/notification`,
     orgId: "02cdc6c4b5df4fb7",
     status: "active",
     name: `${sendVia}_${name}`,
