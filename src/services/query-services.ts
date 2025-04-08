@@ -1,7 +1,5 @@
 import { DATABASE_QUERY_URL } from "@/constants/urls";
 import { PanelApi, panelApiSchema } from "@/schemas/panel";
-import axios from "axios";
-import qs from "qs";
 import { httpClient } from "./http-client";
 
 export const executeDatabaseQuery = async (
@@ -14,7 +12,12 @@ export const executeDatabaseQuery = async (
     q: query,
   };
 
-  const response = await axios.post(BASE_URL, qs.stringify(payload));
+  const response = await httpClient.post(BASE_URL, payload, {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "application/json",
+    },
+  });
 
   const data = response.data;
 

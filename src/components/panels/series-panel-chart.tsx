@@ -14,15 +14,13 @@ import {
 
 interface SeriesPanelChartProps {
   panel: Panel;
-  data: [string, number | null][][];
-  colors: string[];
+  data: (string | number | null)[][][];
   paddingPercentage?: number;
 }
 
 const SeriesPanelChart = ({
   panel,
   data,
-  colors,
   paddingPercentage = 10,
 }: SeriesPanelChartProps) => {
   const transformedData = useMemo(() => {
@@ -30,23 +28,26 @@ const SeriesPanelChart = ({
     let min = Number.MAX_VALUE;
     let max = Number.MIN_VALUE;
     const mean = Array(data.length).fill(0);
-    for (let i = 0; i < data[0].length; i++) {
-      const time = new Date(data[0][i][0]).toLocaleString("fa-IR", {
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+    for (let i = 0; i < data.length; i++) {
       const valuesRecord: { [key: string]: number | null } = {};
-      for (let j = 0; j < data.length; j++) {
-        valuesRecord[`value${j}`] = data[j][i][1];
-        if (data[j][i][1] !== null) {
-          min = Math.min(min, data[j][i][1] as number);
-          max = Math.max(max, data[j][i][1] as number);
-          mean[j] += data[j][i][1] as number;
+      for (let j = 0; j < data[i].length; j++) {
+        if (data[i][j].length === 0) continue;
+        const time = new Date(data[i][j][0] as string).toLocaleString("fa-IR", {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        for (let k = 1; k < data[i][j].length; k++) {
+          if (data[i][j][k] === null) continue;
+          const value = data[i][j][k] as number;
+          valuesRecord[`value${k - 1}`] = value;
+          min = Math.min(min, value);
+          max = Math.max(max, value);
+          mean[i] += value;
         }
+        result.push({ date: time, ...valuesRecord });
       }
-      result.push({ date: time, ...valuesRecord });
     }
     return {
       result,
@@ -85,8 +86,8 @@ const SeriesPanelChart = ({
                   key={index}
                   type="linear"
                   dataKey={`value${index}`}
-                  stroke={colors[index]}
-                  fill={colors[index]}
+                  stroke={"black"}
+                  fill={"black"}
                   fillOpacity={0.3}
                 />
               );
@@ -106,10 +107,7 @@ const SeriesPanelChart = ({
           </thead>
           <tbody>
             {data.map((_, index) => (
-              <tr
-                key={index}
-                style={{ color: colors[index], borderColor: colors[index] }}
-              >
+              <tr key={index} style={{ color: "black", borderColor: "black" }}>
                 <td className="border-r truncate">
                   {extractQueryName(panel.query[index])}
                 </td>

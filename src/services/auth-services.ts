@@ -26,13 +26,11 @@ export const register = async (
 export const login = async (
   username: string,
   password: string,
-  email: string
 ) => {
   const response = await axios.post(
     LOGIN_URL,
     {
       username,
-      email,
       password,
     },
     {

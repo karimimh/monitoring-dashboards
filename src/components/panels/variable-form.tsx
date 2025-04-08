@@ -1,6 +1,6 @@
 "use client";
 
-import { useVariables } from "@/hooks/use-variable";
+import { UseVariablesResult } from "@/hooks/use-variable";
 import { Variable } from "@/schemas/variable";
 import { TrashIcon } from "lucide-react";
 import { forwardRef, useImperativeHandle, useState } from "react";
@@ -13,6 +13,11 @@ interface VariablFormProps {
   onSubmit: (variable: Variable) => void;
   variables: Variable[];
   onVariablesChange?: (variables: Variable[]) => void;
+  queryResults: UseVariablesResult;
+  onVariableValueSelected: (
+    variableName: string,
+    value: string | number | null
+  ) => void;
 }
 
 export interface VariableFormHandle {
@@ -21,15 +26,23 @@ export interface VariableFormHandle {
 }
 
 const VariableForm = forwardRef<VariableFormHandle, VariablFormProps>(
-  ({ onSubmit, variables, onVariablesChange }, ref) => {
+  (
+    {
+      onSubmit,
+      variables,
+      onVariablesChange,
+      queryResults,
+      onVariableValueSelected,
+    },
+    ref
+  ) => {
     const [value, setValue] = useState<Variable>({
       name: "",
       query: "",
     });
 
     const [isOpen, setIsOpen] = useState(false);
-    const queryResults = useVariables("metrics", variables);
-    console.log(queryResults);
+
     useImperativeHandle(ref, () => ({ setIsOpen, setVariableForm: setValue }));
     return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -106,8 +119,12 @@ const VariableForm = forwardRef<VariableFormHandle, VariablFormProps>(
                               return item;
                             });
                             onVariablesChange?.(newVariables);
+                            onVariableValueSelected(
+                              variable.name,
+                              e.target.value
+                            );
                           }}
-                          value={variable.value}
+                          value={variable.value ?? undefined}
                         >
                           {queryResults[index]?.data?.results
                             ?.at(0)
