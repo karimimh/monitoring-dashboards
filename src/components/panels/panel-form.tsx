@@ -4,10 +4,10 @@ import { Panel } from "@/types/panel";
 import { generateEmptyPanel } from "@/utils/random";
 import { PlusCircle } from "lucide-react";
 import { forwardRef, useImperativeHandle, useState } from "react";
-import AutogrowingTextarea from "../ui/autogrowing-textarea";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { Input } from "../ui/input";
+import NewQuery from "./new-query";
 
 interface PanelFormProps {
   onSubmit: (panelForm: Panel) => void;
@@ -40,9 +40,10 @@ const PanelForm = forwardRef<PanelFormHandle, PanelFormProps>(
               />
             </div>
             {value.query.map((query, index) => (
-              <div className="w-full flex items-center gap-2" key={index}>
+              <div className="w-full flex gap-2" key={index}>
                 <div className="w-32">کوئری {index + 1}</div>
-                <AutogrowingTextarea
+                <NewQuery />
+                {/* <AutogrowingTextarea
                   className="flex-1 h-7 font-sans text-xs"
                   value={query}
                   minRows={4}
@@ -56,7 +57,7 @@ const PanelForm = forwardRef<PanelFormHandle, PanelFormProps>(
                     ];
                     setValue({ ...value, query: newQueries });
                   }}
-                />
+                /> */}
               </div>
             ))}
             <div className="w-full py-2">
