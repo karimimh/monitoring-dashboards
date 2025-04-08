@@ -8,9 +8,7 @@ export const panelApiSchema = z.object({
         z.object({
           name: z.string(),
           columns: z.array(z.string()),
-          values: z.array(
-            z.tuple([z.string().datetime(), z.number().nullable()])
-          ),
+          values: z.array(z.array(z.union([z.string(), z.number(), z.null()]))),
         })
       ),
     })

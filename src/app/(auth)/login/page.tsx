@@ -11,16 +11,14 @@ import { useState } from "react";
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
   const router = useRouter();
 
   const handleLogin = async () => {
     try {
-      const token = await login(username, password, email);
+      const token = await login(username, password);
       if (token) {
         localStorage.setItem("token", token);
         localStorage.setItem("username", username);
-        localStorage.setItem("email", email);
         httpClient.defaults.headers.common["Authorization"] = token;
         router.push("/dashboards");
       } else alert("خطا در ورود");
@@ -37,11 +35,6 @@ const LoginPage = () => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="نام کاربری"
-        />
-        <Input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="ایمیل"
         />
         <Input
           value={password}

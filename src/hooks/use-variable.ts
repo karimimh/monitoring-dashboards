@@ -1,8 +1,8 @@
 import { Variable } from "@/schemas/variable";
-import { executeVariableQuery } from "@/services/services";
+import { executeVariableQuery } from "@/services/query-services";
 import { useQueries } from "@tanstack/react-query";
 
-type UseVariablesResult = {
+export type UseVariablesResult = {
   data:
     | {
         results?: {

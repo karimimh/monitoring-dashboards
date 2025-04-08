@@ -1,28 +1,35 @@
 "use client";
 
-import { useDatabaseQueries } from "@/hooks/use-panel";
-import SeriesPanel from "./series-panel";
-import { Skeleton } from "../ui/skeleton";
+import { useDatabaseQueries } from "@/hooks/use-query";
 import { Panel } from "@/types/panel";
-import { Variable } from "@/schemas/variable";
+import { Skeleton } from "../ui/skeleton";
+import SeriesPanel from "./series-panel";
 
 interface PanelCardsProps {
   panels: Panel[];
-  variables: Variable[];
   onEditPanelClick: (panel: Panel) => void;
   onDeleteButtonClick: (panel: Panel) => void;
+  variableValues: {
+    name: string;
+    values: (string | number | null)[];
+  }[];
+  selectedVariableValues: {
+    name: string;
+    values: (string | number | null);
+  }[];
 }
 
 const PanelCards = ({
   panels,
   onEditPanelClick,
   onDeleteButtonClick,
-  variables,
+  variableValues,selectedVariableValues
 }: PanelCardsProps) => {
   const queryResults = useDatabaseQueries(
-    "influx",
+    "metrics",
     panels.map((panel) => panel.query),
-    variables
+    variableValues,
+    selectedVariableValues
   );
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 place-items-start gap-4 pt-16 pb-10 px-6">
