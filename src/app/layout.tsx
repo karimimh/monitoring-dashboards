@@ -12,7 +12,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="antialiased font-yekan bg-slate-200 relative">
+      <body className="antialiased font-vazirmatn bg-slate-200 relative">
         <QueryClientProvider client={queryClient}>
           {children}
         </QueryClientProvider>

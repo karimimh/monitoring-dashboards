@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        yekan: ["YekanBakhFaNum", "Arial", "Helvetica", "sans-serif"],
+        vazirmatn: ["Vazirmatn", "Tahoma", "Arial", "sans-serif"],
       },
       colors: {
         background: "hsl(var(--background))",

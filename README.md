@@ -102,7 +102,6 @@ Next.js App Router (client components)
 │   ├── constants/           # URLs, InfluxDB settings, panel defaults
 │   ├── types/               # shared TypeScript types
 │   └── utils/
-├── public/fonts/            # Yekan Bakh web font (see "Third-party assets")
 ├── PLAN.md                  # design notes for variables and the structured query builder
 ├── .env.example
 └── next.config.ts           # redirects / to /dashboards
@@ -146,7 +145,7 @@ All settings are optional environment variables, documented in [`.env.example`](
 
 ## Third-party assets
 
-`public/fonts/YekanBakhFaNum-Regular.woff` is the Yekan Bakh FaNum typeface © Fontiran ([fontiran.com](https://fontiran.com)). It is a commercial font that needs a license from Fontiran, and it is not covered by any license of this repository. If you reuse the project, use your own licensed copy or swap in another font in `src/app/globals.css` and `tailwind.config.ts`.
+The UI uses the [Vazirmatn](https://github.com/rastikerdar/vazirmatn) typeface, loaded from Google Fonts and licensed under the SIL Open Font License 1.1.
 
 ## Project status
 
