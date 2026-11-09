@@ -1,6 +1,8 @@
 "use client";
 
 import axios from "axios";
+import { INFLUXDB_AUTH_HEADER } from "@/constants/influxdb";
+import { INFLUXDB_URL } from "@/constants/urls";
 import { Trash } from "lucide-react";
 import DropdownButton from "../ui/dropdown-button";
 
@@ -34,11 +36,11 @@ const NotificationChecks = ({ data }: NotificationChecksProps) => {
                 icon: Trash,
                 onClick: async () => {
                   await axios.delete(
-                    `http://localhost:8086/api/v2/checks/${check.id}`,
+                    `${INFLUXDB_URL}/api/v2/checks/${check.id}`,
                     {
                       headers: {
                         Accept: "application/json",
-                        Authorization: "Token testtest",
+                        Authorization: INFLUXDB_AUTH_HEADER,
                         "Content-Type": "application/x-www-form-urlencoded",
                       },
                     }

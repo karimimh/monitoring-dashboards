@@ -1,3 +1,4 @@
+import { INFLUXDB_ORG_ID } from "@/constants/influxdb";
 import {
   BASE_URL,
   NOTIFICATION_CHECKS_URL,
@@ -14,7 +15,7 @@ import qs from "qs";
 import { httpClient } from "./http-client";
 
 export const getAllNotificationEndpoints = async () => {
-  const URL = `${NOTIFICATION_ENDPOINTS_URL}?orgID=YOUR_ORG_ID`;
+  const URL = `${NOTIFICATION_ENDPOINTS_URL}?orgID=${INFLUXDB_ORG_ID}`;
   const response = await httpClient.get(URL);
 
   return response.data.notificationEndpoints;
@@ -30,7 +31,7 @@ export const createNotificationEndpoint = async (
     method: "POST",
     type: "http",
     url: `${BASE_URL}/api/v1/notification`,
-    orgId: "YOUR_ORG_ID",
+    orgId: INFLUXDB_ORG_ID,
     status: "active",
     name: `${sendVia}_${name}`,
   };
@@ -62,7 +63,7 @@ export const createNotificationCheck = async (
     status: "active",
     name,
     id: crypto.randomBytes(8).toString("hex"),
-    orgId: "YOUR_ORG_ID",
+    orgId: INFLUXDB_ORG_ID,
     query: JSON.parse(query),
     every: scheduleEvery,
     thresholds: [
@@ -81,7 +82,7 @@ export const createNotificationCheck = async (
 };
 
 export const getAllNotifications = async () => {
-  const URL = `${NOTIFICATION_CHECKS_URL}?orgID=YOUR_ORG_ID`;
+  const URL = `${NOTIFICATION_CHECKS_URL}?orgID=${INFLUXDB_ORG_ID}`;
   const response = await httpClient.get(URL);
 
   return response.data.checks;
@@ -117,11 +118,11 @@ export const createNotificationRule = async (
         };
   const payload = {
     name,
-    orgID: "YOUR_ORG_ID",
+    orgID: INFLUXDB_ORG_ID,
     status: "active",
     activeStatus: "active",
     description: "",
-    channelID: "YOUR_ORG_ID",
+    channelID: INFLUXDB_ORG_ID,
     every: "1m",
     labels: [],
     endpointID,
@@ -135,7 +136,7 @@ export const createNotificationRule = async (
 };
 
 export const getAllNotificationRules = async () => {
-  const URL = `${NOTIFICATION_RULES_URL}?orgID=YOUR_ORG_ID`;
+  const URL = `${NOTIFICATION_RULES_URL}?orgID=${INFLUXDB_ORG_ID}`;
   const response = await httpClient.get(URL);
 
   return response.data.notificationRules;

@@ -1,4 +1,12 @@
-export const BASE_URL = "http://localhost:8081";
+// Base URL of the monitoring backend API. Override it with
+// NEXT_PUBLIC_API_BASE_URL (see .env.example).
+export const BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
+
+// InfluxDB v2 HTTP API. The notification lists call it directly to delete
+// checks, endpoints and rules. Override it with NEXT_PUBLIC_INFLUXDB_URL.
+export const INFLUXDB_URL =
+  process.env.NEXT_PUBLIC_INFLUXDB_URL || "http://localhost:8086";
 
 export const REGISTER_URL = `${BASE_URL}/register`;
 export const LOGIN_URL = `${BASE_URL}/login`;

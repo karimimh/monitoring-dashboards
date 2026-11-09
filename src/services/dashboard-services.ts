@@ -1,3 +1,4 @@
+import { INFLUXDB_ORG_ID } from "@/constants/influxdb";
 import { DASHBOARD_URL } from "@/constants/urls";
 import { Panel } from "@/types/panel";
 import { httpClient } from "./http-client";
@@ -28,7 +29,7 @@ export const createDashboard = async (name: string, panels: Panel[]) => {
       index,
     })),
     variables: [],
-    orgId: "YOUR_ORG_ID",
+    orgId: INFLUXDB_ORG_ID,
   };
 
   const response = await httpClient.post(URL, payload);
