@@ -1,5 +1,4 @@
 import { PanelApi } from "@/schemas/panel";
-import { Variable } from "@/schemas/variable";
 import { executeDatabaseQuery } from "@/services/query-services";
 import { useQueries } from "@tanstack/react-query";
 
@@ -19,7 +18,7 @@ export const useDatabaseQueries = (
   }[],
   selectedVariableValues: {
     name: string;
-    values: string | number | null;
+    value: string | number | null;
   }[]
 ): UseDatabaseQueriesResult => {
   const replaceQueryVariables = (query: string): string => {

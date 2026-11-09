@@ -5,9 +5,7 @@ import { useState } from "react";
 import Select from "../select";
 import { Button } from "../ui/button";
 
-interface NewQueryProps {}
-
-const NewQuery = ({}: NewQueryProps) => {
+const NewQuery = () => {
   const fromQuery = useDatabaseQueries(
     "metrics",
     [["show measurements"]],

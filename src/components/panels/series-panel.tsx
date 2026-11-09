@@ -41,7 +41,6 @@ const SeriesPanel = ({
       {panelData.length > 0 ? (
         <SeriesPanelChart
           panel={panel}
-          colors={panel.colors}
           data={panelValues}
           paddingPercentage={10}
         />

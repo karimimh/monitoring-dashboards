@@ -15,7 +15,7 @@ interface PanelCardsProps {
   }[];
   selectedVariableValues: {
     name: string;
-    values: (string | number | null);
+    value: string | number | null;
   }[];
 }
 

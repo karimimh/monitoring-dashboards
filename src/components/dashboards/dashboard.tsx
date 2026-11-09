@@ -38,7 +38,7 @@ const Dashboard = ({ selectedDashboard }: DashboardProps) => {
       const data = panelQueryResult.data?.results
         ?.at(0)
         ?.series[0].values.map((value) => value.at(1))
-        .filter((item) => Boolean(item));
+        .filter((item): item is string | number => Boolean(item));
       if (!data) continue;
       result.push({ name, values: data });
     }
